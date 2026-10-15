@@ -1,0 +1,2173 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Module 2 Objective Map</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: four topic columns read left to right (understand, tools, check, build);
+   dependency arrows run between objective cards; a side sheet holds the notes. */
+:root{
+  --bg:#EEF2F3; --surface:#FFFFFF; --ink:#14242B; --muted:#536A73; --line:#C9D5D9; --code-bg:#E4ECEE;
+  --ok:#1B7A3D; --bad:#B3261E; --a:#3D4FB8; --b:#0B7A75; --c:#A8590A; --d:#9A2F6B;
+  --display:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible",Verdana,system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F1A1F; --surface:#17262D; --ink:#E6EEF0; --muted:#9DB2BA; --line:#2F444D; --code-bg:#0B1418;
+    --ok:#6FD08C; --bad:#FF8A80; --a:#9AA8FF; --b:#4FD1C5; --c:#F0A857; --d:#F08BC0; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F1A1F; --surface:#17262D; --ink:#E6EEF0; --muted:#9DB2BA; --line:#2F444D; --code-bg:#0B1418;
+  --ok:#6FD08C; --bad:#FF8A80; --a:#9AA8FF; --b:#4FD1C5; --c:#F0A857; --d:#F08BC0; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;padding-inline:20px;padding-block:28px 56px}
+.page{max-width:1240px;margin-inline:auto;display:flex;flex-direction:column;gap:28px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.15}
+p{margin:0}
+.eyebrow{font-size:.78rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.top{display:flex;flex-direction:column;gap:10px}
+.top h1{font-size:clamp(1.8rem,4.5vw,2.9rem);font-weight:700;letter-spacing:-.01em}
+.top .lede{max-width:62ch;color:var(--muted);font-size:1.05rem}
+.los{display:flex;flex-wrap:wrap;gap:8px 28px;font-size:.92rem;color:var(--muted);border-top:1px solid var(--line);padding-top:14px}
+.los div{flex:1 1 320px;min-width:0}
+.los b{color:var(--ink);font-family:var(--mono);font-size:.82rem;margin-right:6px}
+
+.ta{--k:var(--a)} .tb{--k:var(--b)} .tc{--k:var(--c)} .td{--k:var(--d)}
+
+.mapwrap{position:relative}
+.map{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));column-gap:68px;row-gap:28px;align-items:start;position:relative}
+.col{display:flex;flex-direction:column;gap:16px;min-width:0;position:relative;z-index:1}
+.colhead{display:flex;flex-direction:column;gap:2px;padding-bottom:10px;border-bottom:2px solid var(--k);min-height:5.6em}
+.colhead .code{font-family:var(--mono);font-weight:600;color:var(--k);font-size:.85rem}
+.colhead h2{font-size:1.08rem;font-weight:700}
+.colhead .ask{font-size:.86rem;color:var(--muted)}
+svg.wires{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;overflow:visible}
+.wire{fill:none;stroke:var(--ink);transition:opacity .15s}
+.wire.main{stroke-width:2.5;opacity:.9}
+.wire.sec{stroke-width:1.5;opacity:0;stroke-dasharray:6 4}
+.mk{fill:var(--muted)} .mkhot{fill:var(--ink)}
+.focusing .wire{opacity:.12}
+.focusing .wire.hot{opacity:1}
+.focusing .wire.sec:not(.hot){opacity:0}
+.node{font:inherit;color:inherit;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:12px 14px 12px;display:flex;flex-direction:column;gap:6px;cursor:pointer;width:100%;transition:opacity .15s,border-color .15s,transform .15s}
+.node:hover,.node:focus-visible{border-color:var(--k);transform:translateY(-1px)}
+.node:focus-visible,.btn:focus-visible,.link:focus-visible,.x:focus-visible{outline:3px solid var(--k,var(--ink));outline-offset:2px}
+.focusing .node:not(.hot){opacity:.38}
+.nrow{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.num{font-family:var(--display);font-weight:700;font-size:1.5rem;color:var(--k);font-variant-numeric:tabular-nums;line-height:1}
+.verb{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--k);border:1px solid var(--k);border-radius:3px;padding:1px 6px;white-space:nowrap}
+.obj{font-weight:700;font-size:.98rem;line-height:1.3}
+.out{font-size:.88rem;color:var(--muted);line-height:1.4}
+.out b{color:var(--ink);font-weight:700}
+.exam{display:flex;justify-content:space-between;align-items:center;gap:8px;font-family:var(--mono);font-size:.72rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.yrs{display:flex;gap:3px}
+.yrs i{font-style:normal;border:1px solid var(--line);border-radius:3px;padding:0 4px;line-height:1.5;opacity:.6}
+.yrs i.on{background:var(--k);border-color:var(--k);color:var(--surface);font-weight:600;opacity:1}
+.pp{min-width:460px}
+.pp .askrow td{border-top:2px solid var(--k)}
+.pp td[rowspan]{white-space:nowrap;font-weight:600}
+.pp td>p+p,.pp td>ul+p,.pp td>.scroll+p,.pp td>pre+p,.pp td>p+pre,.pp td>p+.scroll{margin-top:8px}
+.pp td>pre,.pp td>.scroll{margin-top:6px}
+.pp td ul{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:4px}
+.lab{display:block;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--k);margin-bottom:4px}
+dd ul{margin:4px 0 0;padding-left:1.2em;display:flex;flex-direction:column;gap:4px}
+.parts{margin-top:6px;line-height:1.7}
+.blank td:first-child,.blank th:first-child{width:5em}
+.cmd{border-left:3px solid var(--k);padding:2px 0 2px 14px;display:flex;flex-direction:column;gap:6px}
+.cmd p{max-width:65ch}
+.pp td>p+.scroll{margin-top:6px}
+.pp td>pre+p,.pp td>p+p{margin-top:8px}
+.how{list-style:none;padding-left:0!important}
+.how b{font-family:var(--mono);display:inline-block;min-width:1.4em}
+.fn{font-size:.82rem;color:var(--muted);margin-top:8px}
+.leads{font-size:.8rem;color:var(--muted);padding-top:8px;border-top:1px dashed var(--line);display:flex;flex-direction:column;gap:3px;line-height:1.35}
+.ld b{font-family:var(--mono);font-size:.74rem;color:var(--ink);font-weight:600;margin-right:2px;white-space:nowrap}
+.ld.mainld b{color:var(--k)}
+.leads .open{font-family:var(--mono);font-size:.72rem;align-self:flex-end;margin-top:2px}
+.labels{position:absolute;inset:0;pointer-events:none;z-index:3}
+.pill{position:absolute;transform:translate(-50%,-50%);background:var(--ink);color:var(--bg);font-size:.72rem;line-height:1.25;padding:3px 8px;border-radius:4px;white-space:nowrap;box-shadow:0 1px 4px rgba(0,0,0,.25)}
+.pill.side{transform:translate(8px,-50%)}
+.key{display:flex;flex-wrap:wrap;gap:6px 22px;font-size:.85rem;color:var(--muted);align-items:center}
+.key span{display:inline-flex;align-items:center;gap:8px}
+.key i{display:inline-block;width:34px;border-top:2.5px solid var(--ink)}
+.key i.dash{border-top:1.5px dashed var(--ink)}
+.tag{font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--k);border:1px solid var(--k);border-radius:3px;padding:0 5px;margin-right:4px;white-space:nowrap}
+.where{display:flex;flex-direction:column;gap:8px;border:1px solid var(--line);border-radius:6px;padding:10px 12px;background:var(--bg)}
+.where .row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.where .rl{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--muted);min-width:6.5em}
+.chip{font:inherit;font-size:.82rem;color:var(--ink);background:var(--surface);border:1px solid var(--k);border-radius:999px;padding:2px 10px;cursor:pointer}
+.chip b{font-family:var(--mono);font-size:.76rem;color:var(--k);margin-right:4px}
+.chip:hover{background:var(--k);color:var(--surface)} .chip:hover b{color:var(--surface)}
+.chip:focus-visible{outline:3px solid var(--k);outline-offset:2px}
+.chip.here{background:var(--k);color:var(--surface);cursor:default} .chip.here b{color:var(--surface)}
+.where .none{font-size:.82rem;color:var(--muted)}
+.leads .open{color:var(--k);font-weight:600}
+@media (max-width: 899px){.labels,.key .hov{display:none}}
+
+.links h2{font-size:1.35rem;margin-bottom:4px}
+.links .sub{color:var(--muted);margin-bottom:14px;max-width:62ch}
+.linkgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:0 32px}
+.lrow{display:grid;grid-template-columns:auto 1fr;gap:12px;padding:9px 0;border-top:1px solid var(--line);font-size:.92rem;align-items:baseline}
+.lrow .pair{font-family:var(--mono);font-size:.82rem;font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums}
+.lrow .pair .f{color:var(--k)}
+.lrow .why{min-width:0;color:var(--muted)}
+.foot{font-size:.82rem;color:var(--muted);border-top:1px solid var(--line);padding-top:14px}
+
+dialog.sheet{border:0;padding:0;margin:0 0 0 auto;height:100%;max-height:100%;width:min(820px,100%);max-width:100%;background:var(--surface);color:var(--ink);overflow-y:auto;box-shadow:-12px 0 40px rgba(0,0,0,.25)}
+dialog.sheet::backdrop{background:rgba(8,16,20,.55)}
+.shead{position:sticky;top:0;background:var(--surface);border-bottom:2px solid var(--k);padding:calc(16px + env(safe-area-inset-top,0px)) 22px 14px;display:flex;gap:12px;align-items:flex-start;z-index:2}
+.shead .t{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
+.shead h2{font-size:1.4rem;font-weight:700}
+.shead h2 .num{font-size:inherit;margin-right:8px}
+.x{font:inherit;font-family:var(--mono);background:none;border:1px solid var(--line);color:var(--ink);border-radius:4px;padding:4px 10px;cursor:pointer}
+.sbody{padding:18px 22px calc(28px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:22px}
+.sbody h3{font-size:.8rem;letter-spacing:.09em;text-transform:uppercase;color:var(--k);font-family:var(--body);font-weight:700;margin-bottom:8px}
+.outcome{border:1px solid var(--line);border-radius:6px;padding:12px 14px;background:var(--bg)}
+.outcome .lo{font-family:var(--mono);font-size:.78rem;color:var(--muted);display:block;margin-top:6px}
+dl{margin:0;display:flex;flex-direction:column;gap:10px}
+dt{font-weight:700}
+dd{margin:0;color:var(--ink)}
+.ex{display:flex;flex-direction:column;gap:10px}
+.ex p{max-width:65ch}
+.ex ul,.ex ol{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:4px}
+pre{font-family:var(--mono);font-size:.84rem;line-height:1.55;background:var(--code-bg);color:var(--ink);border-radius:6px;padding:12px 14px;margin:0;overflow-x:auto;tab-size:3}
+code{font-family:var(--mono);font-size:.9em;background:var(--code-bg);padding:1px 5px;border-radius:3px}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.88rem}
+th,td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+th{background:var(--bg);font-weight:700}
+td.n,th.n{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.bad{color:var(--c);font-weight:700}
+.seen{font-size:.9rem;color:var(--muted);border-left:3px solid var(--line);padding-left:12px}
+.seen b{color:var(--ink)}
+.conn{display:flex;flex-direction:column;gap:6px}
+.link{font:inherit;color:inherit;text-align:left;background:none;border:1px solid var(--line);border-radius:6px;padding:8px 12px;cursor:pointer;display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:baseline}
+.link:hover{border-color:var(--k)}
+.link .dir{font-family:var(--mono);font-size:.74rem;color:var(--muted);white-space:nowrap}
+.link .dir b{color:var(--k);font-size:.9rem}
+.link .why{font-size:.9rem;min-width:0}
+.nav{display:flex;justify-content:space-between;gap:10px;border-top:1px solid var(--line);padding-top:16px}
+.btn{font:inherit;font-weight:700;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:8px 14px;cursor:pointer}
+.btn:disabled{opacity:.4;cursor:default}
+.fc{max-width:340px;width:100%;height:auto;display:block}
+.fc .s{fill:var(--surface);stroke:var(--ink);stroke-width:1.5}
+.fc .l{fill:none;stroke:var(--ink);stroke-width:1.5}
+.fc text{fill:var(--ink);font-family:var(--mono);font-size:12px;text-anchor:middle}
+.fc .ah{fill:var(--ink)}
+.sym td:first-child{width:86px}
+.sym td{vertical-align:middle}
+.fc .zone{fill:none;stroke:var(--muted);stroke-width:1;stroke-dasharray:5 4}
+.fc text.cap{text-anchor:start;font-size:11px;font-weight:600;fill:var(--k)}
+
+
+.check{display:flex;flex-wrap:wrap;gap:14px 28px;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:16px 20px}
+.check>div{flex:1 1 340px;min-width:0;display:flex;flex-direction:column;gap:4px}
+.check h2{font-size:1.2rem}
+.check p{color:var(--muted);max-width:65ch}
+.tcheck{background:var(--surface);border:1px dashed var(--k);border-radius:6px;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.tcheck .lab{margin:0}
+.tcheck p{font-size:.88rem;color:var(--muted)}
+.tcheck .btn.big{align-self:flex-start;background:var(--k);border-color:var(--k);color:var(--surface);font-size:.92rem;padding:8px 16px}
+.tcheck .adv{color:var(--ink)}
+.rv{font-size:.9rem;display:inline-flex;flex-wrap:wrap;gap:6px;align-items:center}
+.paper{font-size:.9rem;color:var(--muted);font-style:italic}
+.btn.big{background:var(--ink);color:var(--bg);border-color:var(--ink);padding:10px 20px;font-size:1rem}
+.btn.big:focus-visible{outline:3px solid var(--a);outline-offset:2px}
+dialog.quiz{margin:0 auto;width:min(900px,100%)}
+.quiz .sbody h3{font-size:1.05rem;letter-spacing:0;text-transform:none;font-family:var(--display);color:var(--ink);margin-bottom:12px}
+.quiz .intro{color:var(--muted);max-width:65ch}
+.mcq{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:22px;counter-reset:mq}
+.mq{counter-increment:mq;display:flex;flex-direction:column;gap:10px;padding-left:14px;border-left:3px solid var(--line)}
+.mq.done{border-left-color:var(--k)}
+.mqq::before{content:counter(mq) ". ";font-family:var(--mono);font-weight:600;color:var(--k)}
+.mqq pre{margin-top:8px}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px}
+.opt{font:inherit;color:inherit;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:8px 12px;cursor:pointer;display:flex;gap:10px;align-items:baseline;min-width:0}
+.opt b{font-family:var(--mono);color:var(--muted)}
+.opt:hover:not(:disabled){border-color:var(--k)}
+.opt:focus-visible{outline:3px solid var(--k);outline-offset:2px}
+.opt:disabled{cursor:default;color:var(--ink)}
+.opt.right{border-color:var(--ok);box-shadow:inset 0 0 0 1px var(--ok)} .opt.right b{color:var(--ok)}
+.opt.wrong{border-color:var(--bad);box-shadow:inset 0 0 0 1px var(--bad)} .opt.wrong b{color:var(--bad)}
+.fb{font-size:.92rem;max-width:70ch}
+.fb .v{font-weight:700} .fb .v.ok{color:var(--ok)} .fb .v.no{color:var(--bad)}
+.sq{display:flex;flex-direction:column;gap:18px;border-top:2px solid var(--ink);padding-top:16px}
+.sq>h4{font-family:var(--display);font-size:1.02rem;margin:0}
+.sq .case{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.part{display:flex;flex-direction:column;gap:10px;padding-left:14px;border-left:3px solid var(--line)}
+.part.done{border-left-color:var(--k)}
+.pq b{font-family:var(--mono);color:var(--k);margin-right:4px}
+.pm{font-family:var(--mono);font-size:.8rem;color:var(--muted);white-space:nowrap}
+.part textarea{font:inherit;font-family:var(--mono);font-size:.88rem;width:100%;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:8px 10px;resize:vertical}
+.part .btn{align-self:flex-start}
+.fill{font:inherit;font-family:var(--mono);font-size:.9rem;background:var(--surface);color:var(--ink);border:1px solid var(--muted);border-radius:4px;padding:3px 6px;width:5.5em;max-width:100%}
+select.fill{width:auto} .fill.wide{width:15em}
+.fill.ok{border-color:var(--ok);box-shadow:inset 0 0 0 1px var(--ok)}
+.fill.no{border-color:var(--bad);box-shadow:inset 0 0 0 1px var(--bad)}
+.corr{font-family:var(--mono);font-size:.8rem;color:var(--bad);margin-left:6px;white-space:nowrap}
+.auto{display:flex;flex-direction:column;gap:8px}
+.auto .line{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
+.model,.note{border:1px solid var(--line);border-radius:6px;padding:12px 14px;background:var(--bg);display:flex;flex-direction:column;gap:8px}
+.model ul{margin:0;padding-left:1.2em}
+.ticks{list-style:none;padding-left:0!important;display:flex;flex-direction:column;gap:6px}
+.ticks label{display:flex;gap:8px;align-items:flex-start;cursor:pointer}
+.ticks input{margin-top:.3em;flex:none;width:1.05em;height:1.05em;accent-color:var(--k)}
+.res{border-top:2px solid var(--ink);padding-top:18px;display:flex;flex-direction:column;gap:14px}
+.res .total{font-family:var(--display);font-size:1.5rem;font-weight:700}
+.res td.n{white-space:nowrap}
+.meter{display:block;height:8px;border-radius:4px;background:var(--line);min-width:90px;overflow:hidden}
+.meter i{display:block;height:100%;background:var(--k)}
+.res .acts{display:flex;flex-wrap:wrap;gap:10px}
+@media (max-width: 899px){
+  .map{grid-template-columns:1fr;row-gap:30px}
+  svg.wires{display:none}
+  .colhead{min-height:0}
+}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+
+<div class="page">
+  <header class="top">
+    <div class="eyebrow">CAPE Computer Science · Unit 1 · Module 2</div>
+    <h1>Problem-Solving with Computers</h1>
+    <p class="lede">The ten specific objectives are not ten separate topics. Each one feeds the next. The bold line is the main route through the module, and each card lists what it leads to and why. Select any objective to open its notes, key definitions, a worked example and the past paper questions that tested it.</p>
+    <div class="los">
+      <div><b>LO1</b>Apply the stages of the problem-solving process to define, analyse, evaluate and select solutions for given problems.</div>
+      <div><b>LO2</b>Design, represent and verify well-formed algorithms using narrative, flowcharts, pseudocode, test plans and trace tables.</div>
+    </div>
+  </header>
+
+  
+  <div class="key"><span><i></i>Main route through the module</span><span class="hov"><i class="dash"></i>Other links, shown with their reasons when you point at or tab to a card</span></div>
+
+  <section class="mapwrap" aria-label="Objective map">
+    <div class="map" id="map">
+      <svg class="wires" id="wires" aria-hidden="true"></svg>
+      <div class="labels" id="labels" aria-hidden="true"></div>
+    </div>
+  </section>
+</div>
+
+<dialog class="sheet" id="sheet" aria-labelledby="sheetTitle"></dialog>
+<dialog class="sheet quiz" id="quiz" aria-labelledby="quizTitle"></dialog>
+
+<script>
+const TOPICS = {
+  a:{code:"2A", name:"Foundations of Problem-Solving", ask:"What is the problem, and how do we approach it?", lo:"LO1"},
+  b:{code:"2B", name:"Algorithm Design & Representation", ask:"What does a good algorithm look like on paper?", lo:"LO2"},
+  c:{code:"2C", name:"Working with Existing Algorithms", ask:"What does this algorithm do, and is it right?", lo:"LO2"},
+  d:{code:"2D", name:"Constructing & Justifying Algorithms", ask:"Can you write your own, and say why it matters?", lo:"LO2"}
+};
+
+const OBJ = [
+{id:1, t:"a", verb:"Explain", obj:"Explain concepts related to problem-solving",
+ out:"define problem, solution, algorithm and program, and say where the algorithm fits.",
+ defs:[
+  ["Problem","A task or situation where the current state is not the desired state and the way to get there is not yet known."],
+  ["Problem-solving","The process of moving from a stated problem to a solution that has been checked and works."],
+  ["Solution","A method that produces the required outputs from the given inputs."],
+  ["Algorithm","A finite sequence of clear, unambiguous steps that solves a problem. It is the strategy for the solution, written before any code and independent of any programming language."],
+  ["Program","An algorithm expressed in a programming language so that a computer can execute it."]
+ ],
+ ex:`<p>The school canteen line is too long at lunch.</p>
+ <div class="scroll"><table>
+ <tr><th>Concept</th><th>In this situation</th></tr>
+ <tr><td>Problem</td><td>Students wait 20 minutes; the canteen wants this under 5.</td></tr>
+ <tr><td>Solution</td><td>Let students pre-order, so staff only hand over and collect payment.</td></tr>
+ <tr><td>Algorithm</td><td>The steps to take an order: read each item, look up its price, add to a total, print the total.</td></tr>
+ <tr><td>Program</td><td>Those same steps written in C and run on the canteen computer.</td></tr>
+ </table></div>
+ <p>The algorithm comes before the program. If the steps are wrong, the program will be wrong no matter how carefully it is coded.</p>`},
+
+{id:2, t:"a", verb:"Apply", obj:"Apply approaches to problem solving",
+ out:"break a problem down top-down, bottom-up or by stepwise refinement, and draw the hierarchy chart.",
+ defs:[
+  ["Top-down design","Start with the whole problem and split it into smaller sub-problems, then split those, until each piece is simple enough to solve."],
+  ["Bottom-up design","Solve or build the small, basic pieces first, then combine them into larger parts until the whole solution is assembled."],
+  ["Stepwise refinement","Write the solution in a few broad steps, then rewrite each step in more detail, repeating until every step can be coded directly."],
+  ["Hierarchy chart","A tree diagram of the modules in a solution. The main module is at the top and each level below shows the sub-modules it calls. It shows structure, not order or logic."]
+ ],
+ ex:`<p>A payroll problem shown as a hierarchy chart. The two dashed regions mark where each method is at work.</p>
+ <div class="scroll"><svg class="fc" style="max-width:600px;min-width:520px" viewBox="0 0 600 342" role="img" aria-label="Hierarchy chart in four levels. Level 0: Payroll. Level 1: Get employee data, Calculate pay, Print payslip. Level 2, under Calculate pay: Calculate gross pay and Calculate deductions. Level 3, under Calculate gross pay: Find normal pay, Find overtime pay, Add the two amounts. Levels 0 to 2 are marked top-down design. Level 3 is marked stepwise refinement.">
+  <rect class="zone" x="62" y="4" width="534" height="236"/>
+  <rect class="zone" x="62" y="248" width="534" height="88"/>
+  <text class="cap" x="72" y="20">TOP-DOWN DESIGN: the problem is split into modules</text>
+  <text class="cap" x="72" y="324">STEPWISE REFINEMENT: one module is rewritten as finer steps</text>
+  <text x="30" y="53">Level 0</text><text x="30" y="133">Level 1</text><text x="30" y="213">Level 2</text><text x="30" y="285">Level 3</text>
+  <path class="l" d="M320 66V89M150 89H490M150 89V112M320 89V112M490 89V112M320 146V169M235 169H405M235 169V192M405 169V192M235 226V254M150 254H490M150 254V264M320 254V264M490 254V264"/>
+  <rect class="s" x="245" y="32" width="150" height="34"/><text x="320" y="53">Payroll (main)</text>
+  <rect class="s" x="75" y="112" width="150" height="34"/><text x="150" y="133">Get employee data</text>
+  <rect class="s" x="245" y="112" width="150" height="34"/><text x="320" y="133">Calculate pay</text>
+  <rect class="s" x="415" y="112" width="150" height="34"/><text x="490" y="133">Print payslip</text>
+  <rect class="s" x="155" y="192" width="160" height="34"/><text x="235" y="213">Calculate gross pay</text>
+  <rect class="s" x="325" y="192" width="160" height="34"/><text x="405" y="213">Calculate deductions</text>
+  <rect class="s" x="70" y="264" width="160" height="34"/><text x="150" y="285">Find normal pay</text>
+  <rect class="s" x="240" y="264" width="160" height="34"/><text x="320" y="285">Find overtime pay</text>
+  <rect class="s" x="410" y="264" width="160" height="34"/><text x="490" y="285">Add the two amounts</text>
+ </svg></div>
+ <ul>
+  <li><b>Levels 0 to 2 are top-down design.</b> Start with the whole problem at Level 0 and split it downwards into modules. Each box is a separate job that could become its own function.</li>
+  <li><b>From Level 2 to Level 3 it becomes stepwise refinement.</b> No new modules are being found. One module, “Calculate gross pay”, is rewritten as finer steps.</li>
+  <li><b>Refinement continues below the chart</b> until every step can be coded directly:<br><code>normal = hours up to 40 × rate</code><br><code>overtime = hours over 40 × rate × 1.5</code><br><code>gross = normal + overtime</code></li>
+ </ul>
+ <p>The two methods work together. Top-down decides what the modules are. Stepwise refinement supplies the detail inside each one. In practice the boundary falls wherever a box stops being a module and starts being a step.</p>`},
+
+{id:3, t:"a", verb:"Describe", obj:"Describe the stages in the problem-solving process",
+ out:"name the stages in order, say what happens in each, and separate functional from non-functional requirements.",
+ defs:[
+  ["1. Problem definition","State clearly what the problem is, who is affected by it and what its effects are. <b>Note:</b> do not state the causes of the problem in the definition. Causes are worked out later, in the analysis."],
+  ["2. Problem analysis","Study the problem to find its inputs, processing and outputs, and list the requirements."],
+  ["Functional requirement","Something the solution must do. Example: “store each student’s registration”."],
+  ["Non-functional requirement","A quality or constraint on how well the solution does its job. It must be measurable, not just a named quality. “Fast” is not enough. “Displays the result within 2 seconds” can be tested. Other examples: a new user can complete a task within 5 minutes without help; the system is available 99% of opening hours."],
+  ["3. Identify and evaluate possible solutions","Suggest more than one way to solve it and weigh the advantages and disadvantages of each."],
+  ["4. Select and justify the optimal solution","Choose the best option and give reasons."],
+  ["5. Implementation and review","Build the chosen solution, then test it and check that it solves the original problem."]
+ ],
+ ex:`<p>A library wants to calculate late fees automatically.</p>
+ <div class="scroll"><table>
+ <tr><th>Stage</th><th>What is produced</th></tr>
+ <tr><td>Definition</td><td><b>Problem:</b> late fees charged when books are returned are often incorrect.<br><b>Who is affected:</b> library members and desk staff.<br><b>Effects:</b> members are overcharged or undercharged, staff spend time on complaints and corrections, and the library loses income.<br><i>No cause is given here. Why the fees are wrong is a question for the analysis.</i></td></tr>
+ <tr><td>Analysis</td><td><b>Input:</b> due date, return date.<br><b>Process:</b> days late × $0.50.<br><b>Output:</b> fee.<br><b>Functional:</b> calculate and print the late fee.<br><b>Non-functional:</b> the fee is displayed within 2 seconds of entering the return date.</td></tr>
+ <tr><td>Possible solutions</td><td>1. A spreadsheet.<br>2. A custom C program.<br>3. Buying a library package.</td></tr>
+ <tr><td>Select and justify</td><td>Custom program: no licence cost, and it matches the library’s own fee rules.</td></tr>
+ <tr><td>Implementation and review</td><td>Write and install the program, test with real returns, confirm fees are now correct.</td></tr>
+ </table></div>`},
+
+{id:4, t:"b", verb:"Identify", obj:"Identify the necessary properties of well-designed algorithms",
+ out:"list the four properties and spot which one a faulty algorithm breaks.",
+ defs:[
+  ["General solution","It solves every valid case of the problem, not only one set of data."],
+  ["Clearly defined and unambiguous steps","Each step has exactly one meaning, so anyone (or any computer) following it does the same thing."],
+  ["Finite number of steps","It always comes to an end. It never runs forever."],
+  ["Flow of control","The order in which steps are carried out is clear, moving from one process to the next."]
+ ],
+ ex:`<div class="scroll"><table>
+ <tr><th>Faulty step</th><th>Property broken</th><th>Fixed</th></tr>
+ <tr><td>“Add some sugar and stir for a while.”</td><td>Unambiguous</td><td>“Add 2 teaspoons of sugar. Stir for 30 seconds.”</td></tr>
+ <tr><td><code>count = 1</code><br><code>WHILE count &lt; 10 DO PRINT count</code></td><td>Finite: count never changes</td><td>Add <code>count = count + 1</code> inside the loop.</td></tr>
+ <tr><td>“Print 12” as the answer to “add any two numbers”.</td><td>General</td><td>READ a, b; PRINT a + b.</td></tr>
+ <tr><td>Steps listed with no order, or “go to the other part”.</td><td>Flow of control</td><td>Number the steps and state which follows which.</td></tr>
+ </table></div>`},
+
+{id:5, t:"b", verb:"Identify", obj:"Identify ways of representing algorithms",
+ out:"recognise narrative, flowchart and pseudocode, and name the standard flowchart symbols.",
+ defs:[
+  ["Narrative","The algorithm written as numbered steps in everyday language. A person who is not a programmer should be able to read and follow it."],
+  ["Flowchart","A diagram that uses standard symbols joined by arrows to show the steps and the flow of control of the algorithm."],
+  ["Pseudocode","Structured, English-like statements that look like program code but do not follow the rules of any one language."],
+  ["Flowchart symbols",`<div class="scroll"><table class="sym"><tr><th>Symbol</th><th>Name</th><th>Used for</th></tr><tr><td><svg class="fc" style="width:70px" viewBox="0 0 70 32" aria-hidden="true"><rect class="s" x="3" y="4" width="64" height="24" rx="12"/></svg></td><td>Terminator (oval)</td><td>Start or stop of the algorithm</td></tr><tr><td><svg class="fc" style="width:70px" viewBox="0 0 70 32" aria-hidden="true"><polygon class="s" points="12,4 67,4 58,28 3,28"/></svg></td><td>Input/output (parallelogram)</td><td>Reading data in or printing results</td></tr><tr><td><svg class="fc" style="width:70px" viewBox="0 0 70 32" aria-hidden="true"><rect class="s" x="3" y="4" width="64" height="24"/></svg></td><td>Process (rectangle)</td><td>A calculation or an assignment</td></tr><tr><td><svg class="fc" style="width:70px" viewBox="0 0 70 32" aria-hidden="true"><polygon class="s" points="35,2 67,16 35,30 3,16"/></svg></td><td>Decision (diamond)</td><td>A condition with a Yes exit and a No exit</td></tr><tr><td><svg class="fc" style="width:70px" viewBox="0 0 70 32" aria-hidden="true"><path class="l" d="M4 16H58"/><path class="ah" d="M56 11L66 16L56 21z"/></svg></td><td>Flow line (arrow)</td><td>The direction of flow from one step to the next</td></tr></table></div>`]
+ ],
+ ex:`<p>One algorithm, three representations. It reads a mark and prints Pass or Fail.</p>
+ <p><b>Narrative</b></p>
+ <ol><li>Get the mark.</li><li>If the mark is 50 or more, display “Pass”.</li><li>Otherwise display “Fail”.</li></ol>
+ <p><b>Pseudocode</b></p>
+<pre>READ mark
+IF mark >= 50 THEN
+   PRINT "Pass"
+ELSE
+   PRINT "Fail"
+ENDIF</pre>
+ <p><b>Flowchart</b></p>
+ <svg class="fc" viewBox="0 0 340 324" role="img" aria-label="Flowchart: Start, read mark, decision mark at least 50, print Pass or print Fail, Stop">
+  <defs><marker id="fa" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path class="ah" d="M0 0L8 4L0 8z"/></marker></defs>
+  <rect class="s" x="120" y="6" width="100" height="32" rx="16"/><text x="170" y="26">Start</text>
+  <path class="l" d="M170 38V61" marker-end="url(#fa)"/>
+  <polygon class="s" points="118,62 232,62 222,94 108,94"/><text x="170" y="82">Read mark</text>
+  <path class="l" d="M170 94V115" marker-end="url(#fa)"/>
+  <polygon class="s" points="170,116 244,156 170,196 96,156"/><text x="170" y="160">mark ≥ 50?</text>
+  <path class="l" d="M96 156H60V225" marker-end="url(#fa)"/><text x="76" y="148">Yes</text>
+  <path class="l" d="M244 156H280V225" marker-end="url(#fa)"/><text x="264" y="148">No</text>
+  <polygon class="s" points="18,226 112,226 102,258 8,258"/><text x="60" y="246">Print "Pass"</text>
+  <polygon class="s" points="238,226 332,226 322,258 228,258"/><text x="280" y="246">Print "Fail"</text>
+  <path class="l" d="M60 258V300H119" marker-end="url(#fa)"/>
+  <path class="l" d="M280 258V300H221" marker-end="url(#fa)"/>
+  <rect class="s" x="120" y="284" width="100" height="32" rx="16"/><text x="170" y="304">Stop</text>
+ </svg>`},
+
+{id:6, t:"b", verb:"Explain", obj:"Explain constructs used in structured programming",
+ out:"explain input, output, assignment, sequence, selection and iteration, and tell bounded from unbounded loops.",
+ defs:[
+  ["Input and output statements",`<ul><li><b>Input statement:</b> brings data into a variable. Example: <code>READ mark</code></li><li><b>Output statement:</b> displays or sends out a result. Example: <code>PRINT total</code></li></ul>`],
+  ["Assignment statement","Sets a variable to the value of an expression. The = sign is used. The right side is worked out first, then the result is stored in the variable on the left. Example: <code>total = total + price</code>"],
+  ["Sequence","Steps carried out one after another, each exactly once, in the order written."],
+  ["Selection","A condition decides which of two or more paths is taken (IF–THEN–ELSE)."],
+  ["Iteration (repetition)","One or more steps are repeated."],
+  ["Bounded iteration","The number of repetitions is known before the loop starts (FOR)."],
+  ["Unbounded iteration","The loop repeats until a condition changes, so the number of repetitions is not known in advance (WHILE)."],
+  ["Sentinel","A special input value that is not real data and signals that the loop should stop. Example: when marks are being entered, −1 can be the sentinel because no real mark is negative. The loop <code>WHILE mark &lt;&gt; -1 DO</code> stops as soon as −1 is entered."],
+  ["&lt;&gt;","Means “is not equal to”. <code>mark &lt;&gt; -1</code> is true for every value of mark except −1. Some papers write it as <code>!=</code>."]
+ ],
+ ex:`<p><b>Bounded:</b> exactly 5 marks are read.</p>
+<pre>total = 0                 (assignment)
+FOR i = 1 TO 5 DO         (bounded iteration)
+   READ mark              (input)
+   total = total + mark
+ENDFOR
+PRINT total               (output)</pre>
+ <p><b>Unbounded, sentinel-controlled:</b> marks are read until −1 is entered.</p>
+<pre>total = 0
+READ mark
+WHILE mark &lt;&gt; -1 DO       (unbounded iteration)
+   IF mark >= 0 THEN      (selection)
+      total = total + mark
+   ENDIF
+   READ mark
+ENDWHILE
+PRINT total</pre>
+ <p>Here −1 is the sentinel. It is never added to the total.</p>`},
+
+{id:7, t:"c", verb:"Interpret", obj:"Interpret algorithms from case problems",
+ out:"work through a given narrative, flowchart or pseudocode and state exactly what it outputs.",
+ defs:[
+  ["Interpret","Explain what an algorithm does and determine its output for given input."],
+  ["Dry run (desk check)","Following an algorithm by hand, one step at a time, keeping track of each variable, without using a computer. It is performed with a <b>trace table</b> and a chosen set of <b>test data</b>, using pen and paper. The trace table has a column for each variable and one for the output, and a new row is filled in each time a value changes."],
+  ["Output","Only what the algorithm actually prints, in the order it prints it. Values that are calculated but never printed are not output."]
+ ],
+ ex:`<p>What does this algorithm print for the input <code>4 7 10 3 -1</code>?</p>
+<pre>READ n
+total = 0
+WHILE n &lt;&gt; -1 DO
+   IF n MOD 2 = 0 THEN
+      total = total + n
+   ENDIF
+   READ n
+ENDWHILE
+PRINT total</pre>
+ <ul>
+  <li>4 is even, so total becomes 4.</li>
+  <li>7 is odd, so total stays 4.</li>
+  <li>10 is even, so total becomes 14.</li>
+  <li>3 is odd, so total stays 14.</li>
+  <li>−1 ends the loop.</li>
+ </ul>
+ <p><b>Output: 14.</b> In words, the algorithm adds up the even numbers entered before the sentinel.</p>`},
+
+{id:8, t:"c", verb:"Analyse", obj:"Analyse algorithms from case problems for correctness",
+ out:"use a trace table and a test plan to show whether an algorithm meets its objective, and correct it if it does not.",
+ defs:[
+  ["Correctness","An algorithm is correct if it achieves its stated objective for all valid input."],
+  ["Trace table","A table with a column for each variable (and for output) and a row for each step, recording the values as they change during a dry run."],
+  ["Test plan","A list of test cases. Each one gives the test data, the reason for the test and the expected result."],
+  ["Test data types",`For a mark that must be between 0 and 100:<ul><li><b>Normal:</b> typical valid values that the algorithm should accept and process correctly. Example: 67.</li><li><b>Extreme (boundary):</b> valid values at the very edge of the allowed range. Example: 0 and 100.</li><li><b>Erroneous:</b> invalid values that the algorithm should reject. Example: -5, 150 or the word “ten”.</li></ul>`],
+  ["Logic error","A mistake in the steps or conditions that makes the algorithm give the wrong result even though it runs."]
+ ],
+ ex:`<p><b>Stated objective:</b> count how many of 4 marks are passes. The pass mark is 50.</p>
+<pre>count = 0
+FOR i = 1 TO 4 DO
+   READ mark
+   IF mark > 50 THEN
+      count = count + 1
+   ENDIF
+ENDFOR
+PRINT count</pre>
+ <p>Test data chosen to include the boundary: <code>50 72 49 50</code>. Expected result: 3.</p>
+ <div class="scroll"><table>
+ <tr><th class="n">i</th><th class="n">mark</th><th>mark &gt; 50?</th><th class="n">count</th><th>Output</th></tr>
+ <tr><td class="n">–</td><td class="n">–</td><td>–</td><td class="n">0</td><td></td></tr>
+ <tr><td class="n">1</td><td class="n">50</td><td>False</td><td class="n">0</td><td></td></tr>
+ <tr><td class="n">2</td><td class="n">72</td><td>True</td><td class="n">1</td><td></td></tr>
+ <tr><td class="n">3</td><td class="n">49</td><td>False</td><td class="n">1</td><td></td></tr>
+ <tr><td class="n">4</td><td class="n">50</td><td>False</td><td class="n">1</td><td class="n">1</td></tr>
+ </table></div>
+ <p>The trace gives <span class="bad">1, not 3</span>, so the algorithm is not correct. A mark of exactly 50 is a pass but is not counted.</p>
+ <p><b>Correction:</b> change the condition to <code>mark >= 50</code>. Normal data such as 72 and 30 would not have exposed this. The boundary value did.</p>`},
+
+{id:9, t:"d", verb:"Develop", obj:"Develop algorithms from case problems",
+ out:"turn a case problem into your own general, unambiguous, finite algorithm with a clear flow of control.",
+ defs:[
+  ["Case problem","A short real-world scenario that describes what a solution must do."],
+  ["IPO","Input, Processing, Output. List these from the case before writing any steps."],
+  ["Initialisation","Giving counters and totals a starting value before they are used. Example: <code>total = 0</code> is placed before the loop, so that <code>total = total + cost</code> has a value to add to the first time it runs."],
+  ["The four checks",`These are the same properties from objective 4.<ul><li>Is it general? It must work for any valid input, not one set of data.</li><li>Are the steps unambiguous? Each step must have only one meaning.</li><li>Does it end? It must finish after a finite number of steps.</li><li>Is the flow of control clear? The order of the steps must be explicit.</li></ul>`]
+ ],
+ ex:`<p><b>Case:</b> A cinema charges $20 per ticket. A customer who buys 10 or more tickets gets 15% off. Customers are served until 0 tickets is entered. Print each customer’s cost and the total takings.</p>
+ <div class="scroll"><table>
+ <tr><th>Input</th><th>Processing</th><th>Output</th></tr>
+ <tr><td>tickets (per customer)</td><td>cost = tickets × 20<br>if tickets ≥ 10, cost = cost × 0.85<br>add cost to total<br>repeat until tickets = 0</td><td>cost (per customer)<br>total</td></tr>
+ </table></div>
+<pre>total = 0
+PRINT "Number of tickets (0 to stop): "
+READ tickets
+WHILE tickets &lt;&gt; 0 DO
+   cost = tickets * 20
+   IF tickets >= 10 THEN
+      cost = cost * 0.85
+   ENDIF
+   PRINT "Cost: ", cost
+   total = total + cost
+   READ tickets
+ENDWHILE
+PRINT "Total takings: ", total</pre>
+ <p>Checks: it works for any number of customers (general); every step has one meaning; entering 0 ends it (finite); the order of steps is explicit.</p>
+ <p><b>Sample trace table.</b> Input data: <code>3 10 0</code></p>
+ <div class="scroll"><table>
+ <tr><th class="n">tickets</th><th>tickets &lt;&gt; 0?</th><th class="n">cost</th><th>tickets >= 10?</th><th class="n">total</th><th>Output</th></tr>
+ <tr><td class="n">–</td><td>–</td><td class="n">–</td><td>–</td><td class="n">0</td><td></td></tr>
+ <tr><td class="n">3</td><td>True</td><td class="n">60</td><td>False</td><td class="n">60</td><td>Cost: 60</td></tr>
+ <tr><td class="n">10</td><td>True</td><td class="n">200, then 170</td><td>True</td><td class="n">230</td><td>Cost: 170</td></tr>
+ <tr><td class="n">0</td><td>False</td><td class="n">170</td><td>–</td><td class="n">230</td><td>Total takings: 230</td></tr>
+ </table></div>
+ <p>The trace gives 60, 170 and a total of 230, which matches a calculation by hand: 3 × 20 = 60, and 10 × 20 = 200 less 15% = 170.</p>
+ <p><b>Sample test plan.</b> Each test ends with 0 to stop the loop.</p>
+ <div class="scroll"><table>
+ <tr><th class="n">Test</th><th>Test data</th><th>Type and reason</th><th>Expected result</th></tr>
+ <tr><td class="n">1</td><td class="n">3, 0</td><td>Normal: no discount</td><td>Cost 60. Total 60.</td></tr>
+ <tr><td class="n">2</td><td class="n">12, 0</td><td>Normal: discount applies</td><td>Cost 204. Total 204.</td></tr>
+ <tr><td class="n">3</td><td class="n">9, 0</td><td>Extreme: just below the discount boundary</td><td>Cost 180. Total 180.</td></tr>
+ <tr><td class="n">4</td><td class="n">10, 0</td><td>Extreme: on the discount boundary</td><td>Cost 170. Total 170.</td></tr>
+ <tr><td class="n">5</td><td class="n">0</td><td>Extreme: no customers at all</td><td>No cost printed. Total 0.</td></tr>
+ <tr><td class="n">6</td><td class="n">3, 10, 0</td><td>Normal: more than one customer</td><td>Costs 60 and 170. Total 230.</td></tr>
+ <tr><td class="n">7</td><td class="n">-4, 0</td><td>Erroneous: a negative number of tickets</td><td>The value should be rejected.</td></tr>
+ </table></div>
+ <p>Test 7 fails. The algorithm accepts −4 and prints a cost of −80. The test plan has exposed a missing check, so a step that rejects negative values should be added. This is why an algorithm is tested before it is coded.</p>`},
+
+{id:10, t:"d", verb:"Explain", obj:"Explain the need for developing the logic of a computer program",
+ out:"explain why the logic must be worked out as an algorithm before any code is written.",
+ defs:[
+  ["Program logic","The order of the instructions and the conditions under which each one is carried out."],
+  ["Logically sequenced instructions","Each instruction is placed so that everything it needs has already been done. This is what an algorithm is."],
+  ["Why logic comes first","A computer does exactly what it is told and cannot guess what you meant. Planning the logic finds mistakes on paper, where they are cheap to fix. The same logic can then be coded in any language, and the code is easier to test and maintain."],
+  ["Logic error vs syntax error",`<ul><li><b>Syntax error:</b> the rules of the programming language are broken, so the translator reports the error and the program does not run. Example: <code>printf("Total")</code> with the semicolon left off the end, or <code>prnt total</code> where the keyword is misspelt.</li><li><b>Logic error:</b> the program runs, but gives the wrong result because the steps or conditions are wrong. No error message appears. Example: <code>average = a + b / 2</code> divides only b by 2. The correct statement is <code>average = (a + b) / 2</code>.</li></ul>Only sound logic and testing will catch a logic error.`]
+ ],
+ ex:`<p>The same three instructions in two orders:</p>
+ <div class="scroll"><table>
+ <tr><th>Poor logic</th><th>Sound logic</th></tr>
+ <tr><td><pre>READ price
+total = price * qty
+READ qty
+PRINT total</pre></td><td><pre>READ price
+READ qty
+total = price * qty
+PRINT total</pre></td></tr>
+ </table></div>
+ <p>On the left, <code>qty</code> is used before it has a value, so the total is meaningless. Nothing is misspelt and a compiler would accept the C version. Only the sequence is wrong. Working out the logic first is how this is caught.</p>`}
+];
+
+const EDGES = [
+ [1,3,"The problem and the solution you defined are what the stages of the process work on.","what the process works on",1],
+ [3,4,"The solution chosen in the process is written as an algorithm, and a good algorithm must have these properties.","the solution becomes an algorithm",1],
+ [4,6,"Clear steps and a clear flow of control come from building the algorithm out of the standard constructs.","built from the constructs",1],
+ [6,7,"Interpreting an algorithm means following its sequence, selections and loops.","follow the constructs",1],
+ [7,8,"Work out what it does produce, then compare that with what it should produce.","actual against expected",1],
+ [8,9,"Correcting a faulty algorithm is practice for writing a correct one, and you test your own the same way.","then test your own",1],
+ [9,10,"The algorithm you develop is the program’s logic, ready to be coded in Module 3.","this is the program’s logic",1],
+ [1,4,"Objective 1 says what an algorithm is. Objective 4 says what makes one well designed.","what makes one good",0],
+ [1,10,"Knowing that a program is an algorithm in code explains why the logic must come first.","why logic comes first",0],
+ [2,3,"Breaking the problem into parts is how the analysis stage is carried out.","how analysis is done",0],
+ [2,9,"Split the case into modules before you write the steps for each one.","split into modules first",0],
+ [3,8,"The review stage is where a solution is tested for correctness.","review means testing",0],
+ [3,9,"Analysis gives you the inputs, processing and outputs your algorithm is built from.","inputs, processing, outputs",0],
+ [4,8,"An algorithm is judged against the four properties when you check it.","judged against these",0],
+ [4,9,"The four properties are the checklist for any algorithm you write.","your checklist",0],
+ [5,7,"You may be given narrative, a flowchart or pseudocode, so you must be able to read all three.","read all three forms",0],
+ [5,9,"Your own algorithm has to be written in one of these forms.","write in one of these",0],
+ [6,5,"Each construct has its own flowchart symbol and pseudocode keyword.","symbols and keywords",0],
+ [6,9,"The constructs are the building blocks of every algorithm you develop.","the building blocks",0]
+];
+const SHORT = {1:"Concepts",2:"Approaches",3:"Process stages",4:"Properties",5:"Representations",6:"Constructs",7:"Interpreting",8:"Checking correctness",9:"Developing",10:"Program logic"};
+
+/* Flowchart drawing helper for model answers */
+let fcN = 0;
+function flow(w,h,nodes,edges){
+  const id = "fm" + (++fcN);
+  let g = '<div class="scroll"><svg class="fc" style="max-width:' + w + 'px;min-width:' + w + 'px" viewBox="0 0 ' + w + ' ' + h + '" role="img" aria-label="Flowchart model answer"><defs><marker id="' + id +
+    '" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path class="ah" d="M0 0L8 4L0 8z"/></marker></defs>';
+  edges.forEach(e => { g += '<path class="l" d="' + e[0] + '" marker-end="url(#' + id + ')"/>'; if (e[1]) g += '<text x="' + e[2] + '" y="' + e[3] + '">' + e[1] + '</text>'; });
+  nodes.forEach(n => { const t = n[0], x = n[1], y = n[2], hw = (n[4] || 120) / 2;
+    if (t === "t") g += '<rect class="s" x="' + (x-hw) + '" y="' + (y-15) + '" width="' + (2*hw) + '" height="30" rx="15"/>';
+    if (t === "p") g += '<rect class="s" x="' + (x-hw) + '" y="' + (y-15) + '" width="' + (2*hw) + '" height="30"/>';
+    if (t === "io") g += '<polygon class="s" points="' + (x-hw+10) + ',' + (y-15) + ' ' + (x+hw+10) + ',' + (y-15) + ' ' + (x+hw-10) + ',' + (y+15) + ' ' + (x-hw-10) + ',' + (y+15) + '"/>';
+    if (t === "d") g += '<polygon class="s" points="' + x + ',' + (y-28) + ' ' + (x+hw) + ',' + y + ' ' + x + ',' + (y+28) + ' ' + (x-hw) + ',' + y + '"/>';
+    g += '<text x="' + x + '" y="' + (y+4) + '">' + n[3] + '</text>'; });
+  return g + '</svg></div>';
+}
+const FC22 = flow(430,592,[
+ ["t",160,20,"Start",90],["io",160,66,'Print "Enter A:"',150],["io",160,112,"Read A",100],["p",160,158,"total = 1",110],
+ ["d",160,220,"A > −1?",130],["p",160,280,"A = 2 × A",110],["d",160,342,"A < 20?",130],
+ ["p",80,404,"A = A − 1",100],["p",240,404,"A = A + 1",100],["p",160,460,"total = total + A",150],
+ ["io",160,506,'Print "Enter A:"',150],["io",160,552,"Read A",100],["io",355,296,"Print total",110],["t",355,346,"Stop",90]
+],[
+ ["M160 35V50"],["M160 81V96"],["M160 127V142"],["M160 173V191"],
+ ["M160 248V264","Yes",180,261],["M225 220H355V280","No",246,212],["M160 295V313"],
+ ["M95 342H80V388","Yes",82,334],["M225 342H240V388","No",240,334],
+ ["M80 419V460H84"],["M240 419V460H236"],["M160 475V490"],["M160 521V536"],
+ ["M160 567V584H20V182H159"],["M355 311V330"]
+]);
+const FC25 = flow(480,572,[
+ ["t",150,20,"Start",90],["io",150,66,"Read count",130],["io",150,112,"Read number",130],
+ ["d",150,176,"count < 0 or number < 0?",260],["p",380,242,"product = −1",130],["p",150,242,"product = 1",120],
+ ["d",150,306,"count > 0?",140],["p",150,370,"product = product × number",210],["p",150,416,"count = count − 1",150],
+ ["io",380,490,"Print product",130],["t",380,540,"Stop",90]
+],[
+ ["M150 35V50"],["M150 81V96"],["M150 127V147"],
+ ["M280 176H380V226","Yes",302,168],["M150 204V226","No",166,220],["M150 257V277"],
+ ["M150 334V354","Yes",170,349],["M150 385V400"],["M150 431V452H24V267H149"],
+ ["M220 306H379","No",242,298],["M380 257V474"],["M380 505V524"]
+]);
+const FC24 = flow(510,372,[
+ ["t",110,20,"Start",90],["io",110,66,"Read gb",110],["d",110,126,"gb < 1?",130],["p",110,200,"cost = gb × 4.00",140],
+ ["d",270,126,"gb ≤ 2?",130],["p",270,200,"cost = gb × 3.00",140],["p",425,200,"cost = gb × 2.50",140],
+ ["io",270,290,"Print cost",120],["t",270,340,"Stop",90]
+],[
+ ["M110 35V50"],["M110 81V97"],["M110 154V184","Yes",130,173],["M175 126H204","No",189,118],
+ ["M270 154V184","Yes",290,173],["M335 126H425V184","No",354,118],
+ ["M110 215V250H269"],["M425 215V250H271"],["M270 215V274"],["M270 305V324"]
+]);
+
+const FC26 = flow(566,466,[
+ ["t",190,22,"Start",90],["io",190,78,"Get Salary",120],["d",190,150,"Salary > 1000?",160],["d",390,150,"Salary > 3500?",160],
+ ["p",75,240,"Income Tax = 0",130],["p",320,240,"Income Tax = 15% of Salary",200],["p",495,240,"Income Tax = 600",126],
+ ["p",280,318,"Social Security = 7% of Salary",230],["io",280,380,"Print Income Tax and Social Security",300],["t",280,442,"End",90]
+],[
+ ["M190 37V62"],["M190 93V121"],["M110 150H75V224","No",92,142],["M270 150H309","Yes",289,142],
+ ["M390 178V224","No",408,206],["M470 150H495V224","Yes",484,142],
+ ["M75 255V318H164"],["M495 255V318H396"],["M320 255V302"],["M280 333V364"],["M280 395V426"]
+]);
+
+/* Paper 2 Section B, May/June 2022 to 2026.
+   y year, q question, ask what was asked, m marks, inf marks inferred, ans model answer, how [marks, for what] */
+const PAPERS = {
+ 1:[{y:2025,q:"3(a)",m:2,ask:"Outline the role of an algorithm in the problem-solving process.",
+   ans:`<p>An algorithm sets out the solution to a problem as a finite sequence of clear, unambiguous steps. It is the plan that is worked out and checked before any code is written, and the program is then written from it.</p>`,
+   how:[[1,"stating that an algorithm represents the solution as a sequence of unambiguous steps"],[1,"stating its role: it is the plan or strategy that is tested and then translated into a program"]]}],
+
+ 2:[{y:2023,q:"3(a)",m:2,ask:"State how the top-down problem-solving method differs from the bottom-up method.",
+   ans:`<p>Top-down starts with the whole problem and breaks it into smaller and smaller sub-problems until each one is simple enough to solve. Bottom-up works the other way: the smallest parts are solved first and then combined to build up the complete solution.</p>`,
+   how:[[1,"top-down: whole problem broken down into smaller sub-problems"],[1,"bottom-up: small parts solved first, then combined into the whole"]]},
+  {y:2024,q:"4(a)",m:4,ask:`Describe the following problem-solving methods.<p class="parts">(i) Stepwise refinement [2]<br>(ii) Bottom up [2]</p>`,
+   ans:`<p><b>(i) Stepwise refinement.</b> The solution is first written as a few broad steps. Each step is then rewritten in more detail, and this is repeated until every step is simple enough to be coded directly.</p>
+   <p><b>(ii) Bottom up.</b> The individual low-level parts of the solution are designed and solved first. These parts are then joined into larger modules until the complete solution is formed.</p>`,
+   how:[[1,"(i) starts with a general or broad outline of the solution"],[1,"(i) steps are repeatedly broken into more detail until they can be coded"],[1,"(ii) the smallest or most basic components are solved first"],[1,"(ii) components are combined to form the complete solution"]]},
+  {y:2026,q:"3(a)",m:2,ask:"State how the bottom-up problem-solving method differs from the top-down method.",
+   ans:`<p>Bottom-up begins with the smallest parts of the problem, solves them, and combines them to build the full solution. Top-down begins with the whole problem and breaks it down into smaller sub-problems until each can be solved.</p>`,
+   how:[[1,"bottom-up: small parts solved first, then combined"],[1,"top-down: whole problem broken down into sub-problems"]]}],
+
+ 3:[{y:2022,q:"4(a)",m:6,ask:"Briefly describe any THREE stages in the software development cycle.",
+   ans:`<ul><li><b>Problem analysis.</b> The problem is studied to find the inputs, processing and outputs, and the functional and non-functional requirements are listed.</li>
+   <li><b>Design.</b> Possible solutions are identified and evaluated, the best one is chosen, and its algorithms are written as flowcharts or pseudocode.</li>
+   <li><b>Implementation and review.</b> The chosen solution is coded and put into use, then tested to confirm that it solves the original problem.</li></ul>
+   <p>Any three correct stages earn the marks. Problem definition, coding, testing and maintenance are also acceptable.</p>`,
+   how:[[3,"naming three stages, 1 mark each"],[3,"a correct description of each stage named, 1 mark each"]]},
+  {y:2023,q:"3(b)",m:4,ask:`Briefly describe the following stages of the problem-solving process.<p class="parts">(i) ‘Problem definition’<br>(ii) ‘Problem analysis’<br>(iii) ‘Identify and evaluate possible solutions’<br>(iv) ‘Implementation and review’</p>`,
+   ans:`<ul><li><b>(i) Problem definition.</b> Stating clearly what the problem is, who is affected by it and what its effects are, without giving its causes.</li>
+   <li><b>(ii) Problem analysis.</b> Studying the problem to identify its inputs, processing and outputs, and the functional and non-functional requirements.</li>
+   <li><b>(iii) Identify and evaluate possible solutions.</b> Proposing more than one way of solving the problem and weighing the advantages and disadvantages of each.</li>
+   <li><b>(iv) Implementation and review.</b> Building the chosen solution and putting it into use, then testing it to check that it solves the problem.</li></ul>`,
+   how:[[4,"one correct description for each of the four stages, 1 mark each"]]},
+  {y:2024,q:"3(a)",m:4,ask:"TechWorld sells used laptops and tablets and wants software to track purchases, stock quantities and customer information. Describe any TWO stages the software company would generally follow when creating the software.",
+   ans:`<ul><li><b>Problem analysis.</b> The developers find out exactly what TechWorld needs: recording purchases, keeping the quantities of laptops and tablets in stock, and storing customer information. These become the requirements.</li>
+   <li><b>Implementation and review.</b> The software is written and installed, then tested with TechWorld’s data to confirm that purchases, stock and customers are tracked correctly.</li></ul>
+   <p>Any two stages are acceptable. Relating each one to TechWorld makes the description stronger.</p>`,
+   how:[[2,"naming two stages, 1 mark each"],[2,"describing what happens in each stage, 1 mark each"]]},
+  {y:2025,q:"3(b)",m:4,ask:`Describe what happens during EACH of the following phases of the problem-solving process.<p class="parts">(i) Implementation and review [2]<br>(ii) Select and justify possible solutions [2]</p>`,
+   ans:`<p><b>(i) Implementation and review.</b> The chosen solution is developed (coded) and put into use. It is then tested and evaluated to check that it solves the original problem, and corrected where it does not.</p>
+   <p><b>(ii) Select and justify.</b> The best solution is chosen from the alternatives that were evaluated. Reasons are given for the choice, for example that it costs least, takes the least time or meets all the requirements.</p>`,
+   how:[[1,"(i) the solution is built or coded and put into use"],[1,"(i) it is tested or evaluated against the original problem"],[1,"(ii) the optimal solution is chosen from the alternatives"],[1,"(ii) reasons are given to support the choice"]]},
+  {y:2026,q:"3(b)",m:8,ask:`The owners of a small air condition repair shop wish to computerize the tracking of repair jobs. The owners are seeking your assistance in developing a user-friendly program that allows them to track customers’ information, the cost of parts used for each repair job, labour costs for each repair job, the repairmen who perform each repair job and the total cost of each repair job. The system would be Windows-based and users would have to log in to gain access.<p class="parts">(i) List THREE functional requirements of the system. [3]<br>(ii) State TWO non-functional requirements of the system. [2]<br>(iii) Explain the next stage in the problem-solving process after identifying the requirements. [3]</p>`,
+   ans:`<p><b>(i)</b> Any three of:</p>
+   <ul><li>Store each customer’s information.</li>
+   <li>Record the cost of the parts used for each repair job.</li>
+   <li>Record the labour cost for each repair job.</li>
+   <li>Record which repairman performed each repair job.</li>
+   <li>Calculate and display the total cost of each repair job.</li></ul>
+   <p><b>(ii)</b> Any two of the following. The case names each quality. Stating it in a measurable way makes the answer stronger.</p>
+   <ul><li><b>User-friendly:</b> a new member of staff can record a repair job within 5 minutes without training.</li>
+   <li><b>Platform:</b> the system runs on computers using the Windows operating system.</li>
+   <li><b>Security:</b> only users who log in with a valid username and password can gain access.</li></ul>
+   <p><b>(iii)</b> The next stage is to identify and evaluate possible solutions. Different ways of meeting the requirements are proposed. Each one is assessed against the requirements, looking at factors such as cost, time and feasibility, so that the best one can then be selected and justified.</p>`,
+   how:[[3,"(i) three functional requirements taken from the case (things the system must do), 1 mark each"],[2,"(ii) two non-functional requirements from the case (user-friendly, Windows-based, log-in access), 1 mark each"],[1,"(iii) naming the stage: identify and evaluate possible solutions"],[1,"(iii) alternative solutions are proposed"],[1,"(iii) each is assessed (advantages, disadvantages, cost, feasibility) so the best can be chosen"]]}],
+
+ 4:[{y:2022,q:"3(a)",m:3,ask:"List the THREE properties of a well-designed algorithm.",
+   ans:`<ul><li>It is a general solution to the problem.</li><li>Its steps are clearly defined and unambiguous.</li><li>It has a finite number of steps.</li></ul><p>“Flow of control from one process to another” is the fourth property in the syllabus and is also accepted.</p>`,
+   how:[[3,"each correct property, 1 mark each"]]},
+  {y:2024,q:"3(b)(i)",m:2,ask:"State TWO properties of well-defined algorithms.",
+   ans:`<p>Any two of: a general solution to the problem; clearly defined and unambiguous steps; a finite number of steps; flow of control from one process to another.</p>`,
+   how:[[2,"each correct property, 1 mark each"]]},
+  {y:2025,q:"4(a)",m:2,ask:"State TWO properties of well-defined algorithms.",
+   ans:`<p>Any two of: a general solution to the problem; clearly defined and unambiguous steps; a finite number of steps; flow of control from one process to another.</p>`,
+   how:[[2,"each correct property, 1 mark each"]]}],
+
+ 5:[{y:2022,q:"3(b)",m:12,ask:`Construct a flowchart to represent the following algorithm.<pre>start
+print "Enter A:"
+read A
+total = 1
+while A > -1 do
+   A = 2 × A
+   if A < 20 then
+      A = A - 1
+   else A = A + 1
+   endif
+   total = total + A
+   print "Enter A:"
+   read A
+end while
+print total
+stop</pre>`,
+   ans:FC22,
+   how:[[1,"start and stop terminators"],[2,"input/output symbols for the prompts, both reads and the final print"],[2,"process boxes for total = 1 and A = 2 × A"],[2,"loop decision A > −1 with both exits labelled"],[2,"decision A < 20 with A = A − 1 and A = A + 1 on the correct branches"],[1,"total = total + A after the two branches rejoin"],[1,"flow line returning to the loop decision"],[1,"print total on the exit from the loop"]]},
+  {y:2025,q:"4(c)",m:10,ask:`Draw a flowchart to show the following algorithm, where count, number and product are integers.<pre>Read count
+Read number
+if ((count < 0) or (number < 0))
+   product = -1
+else
+   product = 1
+   while (count > 0) begin
+      product = product × number
+      count = count - 1
+   end while
+end if
+print product</pre>`,
+   ans:FC25,
+   how:[[1,"start and stop terminators"],[1,"two input symbols for count and number"],[2,"first decision with the full condition (count < 0 or number < 0) and both exits labelled"],[1,"product = −1 on the true branch"],[1,"product = 1 on the false branch, before the loop"],[1,"loop decision count > 0"],[1,"both process boxes inside the loop"],[1,"flow line returning to the loop decision"],[1,"both paths meeting at a single print product"]]},
+  {y:2026,q:"4(b)",m:10,ask:`Convert the following flowchart to pseudocode.` + FC26,
+   ans:`<pre>START
+READ Salary
+IF Salary > 1000 THEN
+   IF Salary > 3500 THEN
+      IncomeTax = 600
+   ELSE
+      IncomeTax = 0.15 * Salary
+   ENDIF
+ELSE
+   IncomeTax = 0
+ENDIF
+SocialSecurity = 0.07 * Salary
+PRINT IncomeTax, SocialSecurity
+STOP</pre>`,
+   how:[[1,"reading Salary"],[2,"outer IF with the condition Salary > 1000 and a matching ELSE"],[2,"inner IF with the condition Salary > 3500, nested inside the true branch"],[3,"the three Income Tax assignments on the correct branches, 1 mark each"],[1,"Social Security calculated after the selection, so it applies to every path"],[1,"printing both Income Tax and Social Security"]]}],
+
+ 6:[{y:2022,q:"4(b), 4(c)(i)–(ii)",m:6,ask:`4(b) Define the following control constructs and give ONE example of EACH.<p class="parts">(i) Selection [2]<br>(ii) Iteration [2]</p><p>4(c) Read the algorithm below and answer the questions that follow.</p><pre>read z
+sum = 1
+while z < 8 do
+   sum = sum * (z-1)
+   read z
+endwhile
+print "SUM =", sum</pre><p class="parts">(i) State the type of iteration illustrated in the algorithm above. [1]<br>(ii) State how the loop in the algorithm above is expected to terminate. [1]</p>`,
+   ans:`<p><b>4(b)(i) Selection.</b> A condition is tested and the result decides which of two or more sets of steps is carried out. Example: <code>IF mark >= 50 THEN PRINT "Pass" ELSE PRINT "Fail" ENDIF</code></p>
+   <p><b>4(b)(ii) Iteration.</b> One or more steps are repeated, either a fixed number of times or while a condition remains true. Example: <code>FOR i = 1 TO 10 DO PRINT i ENDFOR</code></p>
+   <p><b>4(c)(i)</b> Unbounded iteration.</p>
+   <p><b>4(c)(ii)</b> The loop ends when a value of 8 or more is read into z, because the condition z &lt; 8 is then false.</p>`,
+   how:[[1,"4(b)(i) definition of selection"],[1,"4(b)(i) a correct example"],[1,"4(b)(ii) definition of iteration"],[1,"4(b)(ii) a correct example"],[1,"4(c)(i) unbounded (or condition-controlled)"],[1,"4(c)(ii) terminates when z is 8 or more"]]},
+  {y:2023,q:"4(a)",m:3,ask:`Examine Algorithm 1 and Algorithm 2 and answer the questions that follow.<pre>Algorithm 1            Algorithm 2
+READ A                 FOR X = 1 TO 15 DO
+SUM = 0                   PRINT X
+WHILE A <> 0 DO        END FOR
+   SUM = SUM + A
+   READ A
+END WHILE</pre><p class="parts">(i) State which of the algorithms above illustrates unbounded iteration. Justify your answer. [2]<br>(ii) Explain how the loop in Algorithm 2 is expected to terminate. [1]</p>`,
+   ans:`<p><b>(i)</b> Algorithm 1. The number of times the loop repeats is not known before it starts. It keeps going until the user enters 0.</p>
+   <p><b>(ii)</b> The loop in Algorithm 2 ends after X has taken each value from 1 to 15, that is, after exactly 15 repetitions.</p>`,
+   how:[[1,"(i) identifying Algorithm 1"],[1,"(i) justification: the number of repetitions is not known in advance and depends on the input"],[1,"(ii) terminates after 15 repetitions, when X passes 15"]]},
+  {y:2024,q:"4(b)",m:3,ask:"List the THREE types of control constructs in structured programming.",
+   ans:`<p>Sequence, selection and iteration (repetition).</p>`,
+   how:[[3,"each construct, 1 mark each"]]},
+  {y:2025,q:"3(d)",m:3,ask:`Examine the TWO algorithms below and answer the questions that follow.<pre>Algorithm 1            Algorithm 2
+FOR B = 1 TO 10 DO     A = 1
+   PRINT 5 × B         PROD = 1
+END FOR                WHILE A <> 0 DO
+                          PROD = PROD × A
+                          READ A
+                       END WHILE</pre><p class="parts">(i) State which of the algorithms above illustrates bounded iteration. Justify your answer. [2]<br>(ii) State how the loop in Algorithm 2 is expected to terminate. [1]</p>`,
+   ans:`<p><b>(i)</b> Algorithm 1. The loop repeats a fixed number of times that is known before it starts: 10.</p>
+   <p><b>(ii)</b> The loop in Algorithm 2 ends when the value read into A is 0, because the condition A &lt;&gt; 0 is then false.</p>`,
+   how:[[1,"(i) identifying Algorithm 1"],[1,"(i) justification: a fixed, known number of repetitions"],[1,"(ii) terminates when 0 is read into A"]]},
+  {y:2026,q:"4(a)",m:5,ask:`<p class="parts">(i) Define the term ‘sentinel value’ with respect to programming. [1]<br>(ii) Using an appropriate example, write pseudocode to show how a sentinel value can be used. [4]</p>`,
+   ans:`<p><b>(i)</b> A sentinel value is a special value, which is not valid data, that is entered to signal the end of input and so stop a loop.</p>
+   <p><b>(ii)</b> Adding up numbers until −1 is entered:</p>
+<pre>total = 0
+READ num
+WHILE num &lt;&gt; -1 DO
+   total = total + num
+   READ num
+ENDWHILE
+PRINT total</pre>`,
+   how:[[1,"(i) a special value used to signal the end of input or to terminate a loop"],[1,"(ii) a value is read before the loop"],[1,"(ii) the loop condition tests against the sentinel"],[1,"(ii) the data is processed inside the loop"],[1,"(ii) the next value is read inside the loop, so the sentinel can be reached"]]}],
+
+ 7:[{y:2024,q:"4(c)",m:3,ask:`Consider the following algorithm.<pre>IF (num > 1)
+   IF (num == 3)
+      PRINT "RED"
+   ELSE
+      PRINT "BLUE"
+   ENDIF
+ENDIF
+PRINT "GREEN"</pre><p>Write the output of the algorithm when</p><p class="parts">(i) num = 1<br>(ii) num = 2<br>(iii) num = 3</p>`,
+   ans:`<div class="scroll"><table><tr><th>num</th><th>Output</th><th>Why</th></tr>
+   <tr><td class="n">1</td><td>GREEN</td><td>1 > 1 is false, so the outer IF is skipped.</td></tr>
+   <tr><td class="n">2</td><td>BLUE GREEN</td><td>2 > 1 is true; 2 is not 3, so the ELSE runs.</td></tr>
+   <tr><td class="n">3</td><td>RED GREEN</td><td>3 > 1 is true and 3 equals 3.</td></tr></table></div>
+   <p>GREEN is printed every time because it is outside both IF statements.</p><p>The double equals sign (==) is printed that way in the paper. It is a comparison meaning “is equal to”, as in C. A single = would assign a value.</p>`,
+   how:[[3,"each correct output, 1 mark each"]]},
+  {y:2026,q:"3(c)",m:5,ask:`The algorithm below generates output corresponding to the value AGE.<pre>READ AGE
+WHILE AGE <> 0 DO
+   IF AGE < 18 THEN
+      PRINT YOU CANNOT DRINK
+   ELSE IF AGE < 21 THEN
+      PRINT YOU CANNOT VOTE
+   ELSE
+      PRINT YOU CAN DRINK AND VOTE
+   END_IF
+   READ AGE
+END_WHILE</pre><p>Complete the table below by inserting the output generated for EACH value of AGE entered.</p>
+   <div class="scroll"><table class="blank"><tr><th>AGE</th><th>Output</th></tr><tr><td class="n">30</td><td></td></tr><tr><td class="n">18</td><td></td></tr><tr><td class="n">15</td><td></td></tr><tr><td class="n">21</td><td></td></tr><tr><td class="n">20</td><td></td></tr></table></div>`,
+   ans:`<div class="scroll"><table><tr><th>AGE</th><th>Output</th></tr>
+   <tr><td class="n">30</td><td>YOU CAN DRINK AND VOTE</td></tr>
+   <tr><td class="n">18</td><td>YOU CANNOT VOTE</td></tr>
+   <tr><td class="n">15</td><td>YOU CANNOT DRINK</td></tr>
+   <tr><td class="n">21</td><td>YOU CAN DRINK AND VOTE</td></tr>
+   <tr><td class="n">20</td><td>YOU CANNOT VOTE</td></tr></table></div>
+   <p>18 and 21 are boundary values. 18 &lt; 18 is false, so 18 moves on to the second test. 21 &lt; 21 is false, so 21 reaches the ELSE.</p>`,
+   how:[[5,"each correct output, 1 mark each"]]}],
+
+ 8:[{y:2022,q:"4(c)(iii)",m:3,ask:`Using a trace table, show how the output of the algorithm would print given the line of input data: 5 3 2 6 12 4<pre>read z
+sum = 1
+while z < 8 do
+   sum = sum * (z-1)
+   read z
+endwhile
+print "SUM =", sum</pre>`,
+   ans:`<div class="scroll"><table><tr><th class="n">z</th><th>z &lt; 8?</th><th class="n">sum</th><th>Output</th></tr>
+   <tr><td class="n">5</td><td>–</td><td class="n">1</td><td></td></tr>
+   <tr><td class="n">3</td><td>True (z was 5)</td><td class="n">1 × 4 = 4</td><td></td></tr>
+   <tr><td class="n">2</td><td>True (z was 3)</td><td class="n">4 × 2 = 8</td><td></td></tr>
+   <tr><td class="n">6</td><td>True (z was 2)</td><td class="n">8 × 1 = 8</td><td></td></tr>
+   <tr><td class="n">12</td><td>True (z was 6)</td><td class="n">8 × 5 = 40</td><td></td></tr>
+   <tr><td class="n">12</td><td>False</td><td class="n">40</td><td>SUM = 40</td></tr></table></div>
+   <p>The loop stops when 12 is read. The last value, 4, is never read.</p>`,
+   how:[[1,"a trace table with columns for z and sum"],[1,"correct values of sum as z changes"],[1,"correct output: SUM = 40"]]},
+  {y:2023,q:"4(c)",m:6,ask:`The following algorithm is designed to print a table of cubes of all the even positive integers between 4 (inclusive) and 14 (inclusive). However, there are errors in the algorithm. By referring to the specific line numbers, identify and correct the THREE errors.<pre>1.  i = 4
+2.  while i < 14
+3.     i * i * i = cube
+4.     print i, cube
+5.     i = i + 1
+6.  end while</pre>`,
+   ans:`<div class="scroll"><table><tr><th>Line</th><th>Error</th><th>Correction</th></tr>
+   <tr><td class="n">2</td><td>The loop stops before 14, so 14 is left out.</td><td><code>while i &lt;= 14</code></td></tr>
+   <tr><td class="n">3</td><td>The assignment is the wrong way round. The variable must be on the left.</td><td><code>cube = i * i * i</code></td></tr>
+   <tr><td class="n">5</td><td>Adding 1 makes i odd on every other pass. Only even numbers are wanted.</td><td><code>i = i + 2</code></td></tr></table></div>`,
+   how:[[3,"identifying each error with its line number, 1 mark each"],[3,"each correction, 1 mark each"]]},
+  {y:2024,q:"4(d)",m:5,ask:`Complete the trace table (rows for iterations 1 to 5; columns x, y, Print) for the following algorithm.<pre>x = 9
+y = 2
+while (x > y)
+   y = y + 1
+   x = x - 1
+   Print x
+   Print y
+End while</pre>`,
+   ans:`<div class="scroll"><table><tr><th>Iteration</th><th class="n">x</th><th class="n">y</th><th>Print</th></tr>
+   <tr><td class="n">1</td><td class="n">8</td><td class="n">3</td><td class="n">8 3</td></tr>
+   <tr><td class="n">2</td><td class="n">7</td><td class="n">4</td><td class="n">7 4</td></tr>
+   <tr><td class="n">3</td><td class="n">6</td><td class="n">5</td><td class="n">6 5</td></tr>
+   <tr><td class="n">4</td><td class="n">5</td><td class="n">6</td><td class="n">5 6</td></tr>
+   <tr><td class="n">5</td><td colspan="3">No fifth iteration. After iteration 4, x = 5 and y = 6, so x > y is false and the loop ends.</td></tr></table></div>`,
+   how:[[4,"each correct row for iterations 1 to 4, 1 mark each"],[1,"showing that the loop ends and there is no fifth iteration"]]},
+  {y:2025,q:"3(c)",m:6,ask:`The algorithm below is designed to print a table of squares of all the odd numbers from 1 to 99. However, there are errors in the algorithm. Identify the THREE errors. State the line in which the error occurs and rewrite the line correctly.<pre>Line 1.  k = 1
+Line 2.  while k < 99
+Line 3.     print "Odd Number Square"
+Line 4.     k × k = square
+Line 5.     print k, square
+Line 6.     k + 1
+Line 7.  end while</pre>`,
+   ans:`<div class="scroll"><table><tr><th>Line</th><th>Error</th><th>Rewritten</th></tr>
+   <tr><td class="n">2</td><td>The loop stops before 99, so 99 is left out.</td><td><code>while k &lt;= 99</code></td></tr>
+   <tr><td class="n">4</td><td>The assignment is the wrong way round.</td><td><code>square = k × k</code></td></tr>
+   <tr><td class="n">6</td><td>k is never changed, and adding 1 would give even numbers.</td><td><code>k = k + 2</code></td></tr></table></div>
+   <p>Line 3 also prints the heading on every pass. It belongs before the loop, but that is a matter of moving a line, not rewriting one.</p>`,
+   how:[[3,"identifying each line with an error, 1 mark each"],[3,"rewriting each line correctly, 1 mark each"]]}],
+
+ 9:[{y:2023,q:"3(c)",m:9,ask:`A food court with three restaurants has a single cashier. A separate bill is needed for each restaurant. Each meal is priced as shown. There is also sales tax of 10% and a discount of 5% if a customer buys more than one meal. Write the appropriate pseudocode for calculating a single bill for a single customer, assuming that there are variables called ‘bill’, ‘menuOption’ and ‘numOfMeals’. There should be an option to exit the pseudocode.
+   <div class="scroll"><table><tr><th>Restaurant</th><th class="n">Price (EC$)</th><th class="n">Service charge (%)</th></tr><tr><td>Jamaican</td><td class="n">12</td><td class="n">4</td></tr><tr><td>Barbadian</td><td class="n">10</td><td class="n">3</td></tr><tr><td>Trinidadian</td><td class="n">8</td><td class="n">1</td></tr></table></div>`,
+   ans:`<pre>PRINT "1 Jamaican  2 Barbadian  3 Trinidadian  4 Exit"
+READ menuOption
+IF menuOption &lt;&gt; 4 THEN
+   READ numOfMeals
+   IF menuOption = 1 THEN
+      price = 12
+      service = 0.04
+   ELSE IF menuOption = 2 THEN
+      price = 10
+      service = 0.03
+   ELSE
+      price = 8
+      service = 0.01
+   ENDIF
+   bill = price * numOfMeals
+   bill = bill + bill * service + bill * 0.10
+   IF numOfMeals > 1 THEN
+      bill = bill - bill * 0.05
+   ENDIF
+   PRINT bill
+ENDIF</pre>
+   <p>The question does not say in what order the service charge, tax and discount are applied. Any sensible, consistent order should be accepted.</p>`,
+   how:[[1,"reading menuOption"],[1,"an option to exit"],[1,"reading numOfMeals"],[2,"selection on menuOption giving the correct price for each restaurant"],[1,"the correct service charge for each restaurant"],[1,"adding 10% sales tax"],[1,"5% discount applied only when numOfMeals > 1"],[1,"printing the bill"]]},
+  {y:2024,q:"3(b)(ii)",m:9,ask:`A cellular company provides the following rates for purchasing cellphone data: less than 1 gigabyte, $4.00 per gigabyte; between 1 and 2 gigabytes, $3.00 per gigabyte; more than 2 gigabytes, $2.50 per gigabyte. Draw a flowchart that reads an integer value representing the number of gigabytes used and that calculates and prints the cost.`,
+   ans:FC24,
+   how:[[1,"start and stop terminators"],[1,"input symbol reading the number of gigabytes"],[2,"first decision (less than 1) with both exits labelled"],[2,"second decision (up to 2) with both exits labelled"],[2,"the three cost calculations in process boxes on the correct branches"],[1,"output symbol printing the cost, reached by all three paths"]]}],
+
+ 10:[{y:2025,q:"4(b)",m:3,ask:"Explain why there is a need to develop the logic of computer programs.",
+   ans:`<p>A computer carries out its instructions exactly as they are given, so the steps must be in a correct logical sequence for the program to produce the right result. Developing the logic first, as an algorithm, allows errors to be found and corrected before any code is written, when they are easier and cheaper to fix. The logic does not depend on any language, so it can then be coded in whichever language is chosen, and the resulting program is easier to write, test and maintain.</p>`,
+   how:[[3,"each valid reason, 1 mark each: instructions must be logically sequenced to give correct results; errors are found before coding; the logic is language-independent and makes coding, testing and maintenance easier"]]}]
+};
+const YEARS = [2022,2023,2024,2025,2026];
+const marksOf = id => PAPERS[id].reduce((t,q) => t + q.m, 0);
+const yearsOf = id => new Set(PAPERS[id].map(q => q.y));
+
+/* Command words: definitions follow the glossary in the CXC syllabus */
+const VERBS = {
+ Explain:"Give reasons based on recall; account for. A definition alone is not enough: say why or how.",
+ Apply:"Use knowledge or principles to solve problems. You are expected to carry out the method, not only describe it.",
+ Describe:"Provide detailed factual information about a structure or the sequence of a process. Say what happens, in order.",
+ Identify:"Name or point out specific components or features. A short, exact answer is expected.",
+ Interpret:"Explain the meaning of. For an algorithm, this means working out what it does and what it outputs.",
+ Analyse:"Examine in detail. Break the algorithm into its parts and check each one against what it is supposed to do.",
+ Develop:"Expand or elaborate an idea with supporting reasons. For an algorithm, this means building a complete solution from the case, step by step."
+};
+const CMDEX = {
+ 1:"“Explain the role of an algorithm in problem-solving.” You would say what an algorithm is and why it is needed before coding.",
+ 2:"“Use top-down design to break a payroll problem into modules.” You would produce the hierarchy chart yourself.",
+ 3:"“Describe the problem analysis stage.” You would state what is done in that stage: inputs, processing, outputs and requirements are identified.",
+ 4:"“Identify the property that is broken when a loop never ends.” Answer: a finite number of steps.",
+ 5:"“Identify the flowchart symbol used for a decision.” Answer: the diamond.",
+ 6:"“Explain why a WHILE loop controlled by a sentinel is unbounded.” You would give the reason: the number of repetitions is not known before the loop starts.",
+ 7:"“What does this algorithm print for the input 4 7 10 3 -1?” You would work through it and state the output.",
+ 8:"“Does this algorithm count the passes correctly?” You would trace it with test data, compare the result with what was expected, and correct any error.",
+ 9:"“Write pseudocode to calculate a cinema customer’s ticket cost.” You would build the whole algorithm from the case.",
+ 10:"“Explain why the logic of a program must be developed before coding.” You would give reasons, such as finding errors early."
+};
+
+const byId = id => OBJ.find(o => o.id === id);
+const map = document.getElementById("map"), wires = document.getElementById("wires");
+const sheet = document.getElementById("sheet");
+const nodeEl = {};
+
+/* ---------- build the map ---------- */
+Object.keys(TOPICS).forEach(k => {
+  const T = TOPICS[k];
+  const col = document.createElement("div");
+  col.className = "col t" + k;
+  const first = OBJ.filter(o => o.t === k);
+  col.innerHTML = '<div class="colhead"><span class="code">Topic ' + T.code + ' · ' + T.lo +
+    ' · Objectives ' + first[0].id + '–' + first[first.length-1].id + '</span><h2>' + T.name +
+    '</h2><span class="ask">' + T.ask + '</span></div>';
+  first.forEach(o => {
+    const to = EDGES.filter(e => e[0] === o.id).sort((p,q) => p[1]-q[1]).map(e => '<span class="ld' + (e[4] ? ' mainld' : '') + '"><b>→ 2.' + e[1] + '</b> ' + e[3] + '</span>');
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "node"; b.id = "node" + o.id; b.dataset.id = o.id;
+    b.innerHTML = '<span class="nrow"><span class="num">2.' + o.id + '</span><span class="verb" title="' + o.verb + ': ' + VERBS[o.verb] + '">' + o.verb + '</span></span>' +
+      '<span class="obj">' + o.obj + '</span>' +
+      '<span class="out"><b>You can</b> ' + o.out + '</span>' +
+      '<span class="leads">' + (to.length ? to.join("") : '<span class="ld"><b>→ Module 3</b> the logic is coded in C</span>') + '<span class="open">Open notes</span></span>';
+    b.addEventListener("click", () => openSheet(o.id));
+    b.addEventListener("mouseenter", () => focusOn(o.id));
+    b.addEventListener("mouseleave", () => focusOn(null));
+    b.addEventListener("focus", () => focusOn(o.id));
+    b.addEventListener("blur", () => focusOn(null));
+    nodeEl[o.id] = b; col.appendChild(b);
+  });
+  map.appendChild(col);
+});
+
+
+
+/* ---------- draw the arrows ---------- */
+const NS = "http://www.w3.org/2000/svg";
+function drawWires(){
+  if (getComputedStyle(wires).display === "none") return;
+  const R = map.getBoundingClientRect();
+  const box = {};
+  OBJ.forEach(o => { const r = nodeEl[o.id].getBoundingClientRect();
+    box[o.id] = {l:r.left-R.left, r:r.right-R.left, t:r.top-R.top, h:r.height, cy:r.top-R.top+r.height/2}; });
+  const sameCol = e => byId(e[0]).t === byId(e[1]).t;
+  // which edges touch each side of each card
+  const right = {}, left = {};
+  OBJ.forEach(o => { right[o.id] = []; left[o.id] = []; });
+  EDGES.forEach((e,i) => {
+    right[e[0]].push({i, other:e[1]});
+    if (sameCol(e)) right[e[1]].push({i, other:e[0]}); else left[e[1]].push({i, other:e[0]});
+  });
+  const slot = {};
+  [right,left].forEach((side,s) => Object.keys(side).forEach(id => {
+    const list = side[id].sort((p,q) => box[p.other].cy - box[q.other].cy);
+    list.forEach((it,k) => { slot[it.i + ":" + id + ":" + s] = box[id].t + box[id].h * (k+1) / (list.length+1); });
+  }));
+  let h = '<defs><marker id="mk" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path class="mk" d="M0 0L8 4L0 8z"/></marker>' +
+          '<marker id="mkhot" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path class="mkhot" d="M0 0L8 4L0 8z"/></marker></defs>';
+  mids = [];
+  EDGES.forEach((e,i) => {
+    const A = box[e[0]], B = box[e[1]];
+    const y1 = slot[i + ":" + e[0] + ":0"];
+    let d;
+    if (sameCol(e)) {
+      const y2 = slot[i + ":" + e[1] + ":0"], x = A.r, bulge = Math.min(46, 22 + Math.abs(y2-y1)*0.12);
+      d = "M" + x + " " + y1 + "C" + (x+bulge) + " " + y1 + " " + (x+bulge) + " " + y2 + " " + (x+2) + " " + y2;
+      mids[i] = {x: x + bulge*0.75, y: (y1+y2)/2, side: true};
+    } else {
+      const y2 = slot[i + ":" + e[1] + ":1"], dx = (B.l - A.r) * 0.5;
+      d = "M" + A.r + " " + y1 + "C" + (A.r+dx) + " " + y1 + " " + (B.l-dx) + " " + y2 + " " + (B.l-2) + " " + y2;
+      mids[i] = {x: (A.r+B.l)/2, y: (y1+y2)/2};
+    }
+    h += '<path class="wire ' + (e[4] ? 'main' : 'sec') + '" data-i="' + i + '" data-f="' + e[0] + '" data-t="' + e[1] + '" d="' + d + '" marker-end="url(#mkhot)"/>';
+  });
+  wires.innerHTML = h;
+  if (current !== null) focusOn(current);
+}
+let current = null, mids = [];
+const labels = document.getElementById("labels");
+function focusOn(id){
+  current = id;
+  map.classList.toggle("focusing", id !== null);
+  const hot = new Set(id === null ? [] : [id]);
+  const pills = [];
+  wires.querySelectorAll(".wire").forEach(w => {
+    const f = +w.dataset.f, t = +w.dataset.t, on = id !== null && (f === id || t === id);
+    w.classList.toggle("hot", on);
+    if (on) { hot.add(f); hot.add(t); const i = +w.dataset.i, m = mids[i];
+      if (m) pills.push({x:m.x, y:m.y, side:m.side, text:(f === id ? "→ 2." + t : "2." + f + " →") + " " + EDGES[i][3]}); }
+  });
+  if (id !== null) EDGES.forEach(e => { if (e[0] === id) hot.add(e[1]); if (e[1] === id) hot.add(e[0]); });
+  OBJ.forEach(o => nodeEl[o.id].classList.toggle("hot", hot.has(o.id)));
+  // reason labels on the highlighted arrows, nudged apart so they do not stack
+  pills.sort((p,q) => p.y - q.y);
+  for (let k = 1; k < pills.length; k++) for (let j = 0; j < k; j++)
+    if (Math.abs(pills[k].x - pills[j].x) < 150 && pills[k].y - pills[j].y < 30) pills[k].y = pills[j].y + 30;
+  labels.innerHTML = pills.map(p => '<span class="pill' + (p.side ? ' side' : '') + '" style="left:' + p.x + 'px;top:' + p.y + 'px">' + p.text + '</span>').join("");
+}
+new ResizeObserver(drawWires).observe(map);
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(drawWires);
+drawWires();
+
+/* ---------- the notes sheet ---------- */
+function openSheet(id){
+  const o = byId(id), T = TOPICS[o.t];
+  const inc = EDGES.filter(e => e[1] === id), outg = EDGES.filter(e => e[0] === id);
+  const linkBtn = (other, dir, why) => '<button type="button" class="link t' + byId(other).t + '" data-go="' + other +
+    '"><span class="dir">' + dir + ' <b>2.' + other + '</b></span><span class="why"><b>' + byId(other).obj + '.</b> ' + why + '</span></button>';
+  const chip = (other, why) => '<button type="button" class="chip t' + byId(other).t + '" data-go="' + other + '" title="' + why.replace(/"/g, "&quot;") + '"><b>2.' + other + '</b>' + SHORT[other] + '</button>';
+  sheet.className = "sheet t" + o.t;
+  sheet.innerHTML =
+    '<div class="shead"><div class="t"><span class="eyebrow">Topic ' + T.code + ' · ' + T.name + '</span>' +
+    '<h2 id="sheetTitle"><span class="num">2.' + o.id + '</span>' + o.obj + '</h2></div>' +
+    '<button type="button" class="x" id="closeSheet" aria-label="Close notes">Close</button></div>' +
+    '<div class="sbody">' +
+    '<nav class="where" aria-label="Where this objective sits">' +
+      '<div class="row"><span class="rl">Builds on</span>' + (inc.length ? inc.map(e => chip(e[0], e[2])).join("") : '<span class="none">Nothing. This is a starting point.</span>') + '</div>' +
+      '<div class="row"><span class="rl">You are here</span><span class="chip here t' + o.t + '"><b>2.' + o.id + '</b>' + SHORT[o.id] + '</span></div>' +
+      '<div class="row"><span class="rl">Leads to</span>' + (outg.length ? outg.map(e => chip(e[1], e[2])).join("") : '<span class="none">Module 3, where the logic is coded in C.</span>') + '</div>' +
+    '</nav>' +
+    '<div class="outcome"><b>Learning outcome.</b> You can ' + o.out +
+      '<span class="lo">Contributes to course ' + T.lo + '</span></div>' +
+    '<div class="cmd"><span class="lab">Command word: ' + o.verb + '</span><p>' + VERBS[o.verb] + '</p><p><b>Example:</b> ' + CMDEX[o.id] + '</p></div>' +
+    '<section><h3>Key definitions</h3><dl>' + o.defs.map(d => '<div><dt>' + d[0] + '</dt><dd>' + d[1] + '</dd></div>').join("") + '</dl></section>' +
+    '<section><h3>Worked example</h3><div class="ex">' + o.ex + '</div></section>' +
+    '<section><h3>Past paper questions</h3>' +
+      '<div class="scroll"><table class="pp"><tr><th>Year</th><th>Question</th><th>What was asked</th><th class="n">Marks</th></tr>' +
+      PAPERS[o.id].map(q => '<tr class="askrow"><td class="n" rowspan="3">' + q.y + '</td><td class="n" rowspan="3">' + q.q + '</td><td>' + q.ask + '</td><td class="n">' + q.m + (q.inf ? '*' : '') + '</td></tr>' +
+        '<tr><td colspan="2"><span class="lab">Answer</span>' + q.ans + '</td></tr>' +
+        '<tr><td colspan="2"><span class="lab">How marks would be awarded</span><ul class="how">' + q.how.map(h => '<li><b>' + h[0] + '</b> ' + h[1] + '</li>').join("") + '</ul></td></tr>').join("") +
+      '</table></div>' +
+      (PAPERS[o.id].some(q => q.inf) ? '<p class="fn">* The mark allocation is on a page missing from the scanned paper. This figure is the question total of 15 less the other parts.</p>' : '') +
+      '</section>' +
+    '<section><h3>How it connects</h3><div class="conn">' +
+      inc.map(e => linkBtn(e[0], "Builds on", e[2])).join("") +
+      outg.map(e => linkBtn(e[1], "Leads to", e[2])).join("") + '</div></section>' +
+    '<div class="nav"><button type="button" class="btn" data-go="' + (id-1) + '"' + (id === 1 ? " disabled" : "") + '>= 2.' + Math.max(1,id-1) + '</button>' +
+      '<button type="button" class="btn" data-go="' + (id+1) + '"' + (id === OBJ.length ? " disabled" : "") + '>2.' + Math.min(OBJ.length,id+1) + ' →</button></div>' +
+    '</div>';
+  if (!sheet.open) sheet.showModal();
+  sheet.scrollTop = 0;
+}
+sheet.addEventListener("click", ev => {
+  if (ev.target === sheet || ev.target.closest("#closeSheet")) { sheet.close(); return; }
+  const go = ev.target.closest("[data-go]");
+  if (go && !go.disabled) openSheet(+go.dataset.go);
+});
+sheet.addEventListener("close", () => focusOn(null));
+
+/* ---------- module self-check ---------- */
+const MCQ = [
+ {o:1,q:"Which statement best describes how an algorithm and a program are related?",
+  opts:["A program is an algorithm expressed in a programming language.","An algorithm is a program that has already been compiled.","An algorithm can only be written after the program has been tested.","Algorithm and program are two names for a flowchart."],a:0,
+  why:"The algorithm is the plan. The program is that plan written in a language the computer can execute."},
+ {o:2,q:"A designer first writes and tests separate routines for “calculate tax” and “print payslip”, then joins them to form a payroll solution. Which approach is this?",
+  opts:["Top-down","Bottom-up","Stepwise refinement","Sequencing"],a:1,
+  why:"Bottom-up solves the small parts first and then combines them into the whole."},
+ {o:3,q:"Which of the following is a non-functional requirement for a clinic appointment system?",
+  opts:["Record each patient’s appointment.","Print a list of the day’s appointments.","Display search results within 3 seconds.","Calculate the fee for each visit."],a:2,
+  why:"It describes how well the system must work, and it can be measured. The other three are things the system does."},
+ {o:3,q:"In which stage of the problem-solving process are the advantages and disadvantages of several approaches compared?",
+  opts:["Problem definition","Problem analysis","Identify and evaluate possible solutions","Implementation and review"],a:2,
+  why:"Evaluating means weighing each possible solution before one is selected and justified."},
+ {o:4,q:`Which property of a well-designed algorithm is broken here?<pre>count = 1
+WHILE count < 5 DO
+   PRINT count
+ENDWHILE</pre>`,
+  opts:["It is not a general solution.","Its steps are ambiguous.","It does not have a finite number of steps.","It produces no output."],a:2,
+  why:"count never changes, so the condition is always true and the loop never ends."},
+ {o:5,q:"Which flowchart symbol is used for the step “Read mark”?",
+  opts:["Rectangle","Diamond","Parallelogram","Oval"],a:2,
+  why:"The parallelogram is the input/output symbol. Reading data is input."},
+ {o:5,q:"Which statement about pseudocode is true?",
+  opts:["It must follow the syntax rules of C.","It is structured, English-like and not tied to any one language.","It uses standard symbols joined by arrows.","It can be run directly by the computer."],a:1,
+  why:"Pseudocode looks like code but belongs to no language. Symbols joined by arrows describes a flowchart."},
+ {o:6,q:`In this algorithm, what is the value 999?<pre>READ n
+WHILE n <> 999 DO
+   PRINT n * 2
+   READ n
+ENDWHILE</pre>`,
+  opts:["A counter","A sentinel","An assignment","The number of repetitions"],a:1,
+  why:"999 is not real data. It is entered only to signal that the loop should stop."},
+ {o:6,q:"Which of the following is an example of bounded iteration?",
+  opts:["WHILE answer <> \"N\" DO","FOR i = 1 TO 20 DO","IF x > 5 THEN","READ x"],a:1,
+  why:"The FOR loop repeats exactly 20 times, a number known before it starts."},
+ {o:7,q:`What is the output of this algorithm?<pre>x = 3
+y = 10
+IF x * 3 > y THEN
+   PRINT "A"
+ELSE
+   PRINT "B"
+ENDIF
+PRINT "C"</pre>`,
+  opts:["A C","B C","A","B"],a:1,
+  why:"3 × 3 = 9, and 9 > 10 is false, so B is printed. C is outside the IF, so it is always printed."},
+ {o:7,q:`What is printed by this algorithm?<pre>total = 0
+FOR i = 1 TO 4 DO
+   total = total + i
+ENDFOR
+PRINT total</pre>`,
+  opts:["4","6","10","24"],a:2,
+  why:"total becomes 1, then 3, then 6, then 10."},
+ {o:8,q:"An algorithm should accept ages from 13 to 19 inclusive. Which pair is extreme (boundary) test data?",
+  opts:["15 and 16","13 and 19","12 and 20","“abc” and −4"],a:1,
+  why:"13 and 19 are valid values at the very edges of the range. 12 and 20 are outside it, so they are erroneous."},
+ {o:8,q:"What is a trace table used for?",
+  opts:["Recording the value of each variable as an algorithm is followed step by step.","Listing the functional requirements of a system.","Translating pseudocode into machine code.","Showing the modules of a solution and how they are linked."],a:0,
+  why:"A trace table is the tool for a dry run. The last option describes a hierarchy chart."},
+ {o:9,q:"A program must add up prices until the cashier enters 0, then print the total. Which construct must the algorithm use to keep reading prices?",
+  opts:["A FOR loop that runs a fixed number of times","A WHILE loop controlled by a sentinel","A single IF statement","An assignment statement only"],a:1,
+  why:"The number of prices is not known in advance, so the loop must continue until the sentinel 0 is entered."},
+ {o:10,q:"A program runs with no error messages but prints the wrong average. What kind of error is this?",
+  opts:["A syntax error","A logic error","A translation error","A sentinel error"],a:1,
+  why:"The program ran, so the language rules were followed. The steps themselves are wrong."},
+ {o:1,q:"Which of the following best describes a solution to a problem?",
+  opts:["The code that is compiled and run.","A list of the causes of the problem.","A diagram showing the modules of a program.","A method that produces the required outputs from the given inputs."],a:3,
+  why:"A solution is the method. The code is only one way of carrying it out."},
+ {o:2,q:"Which approach writes a solution as a few broad steps and then breaks each step into more detailed steps until each one can be coded directly?",
+  opts:["Bottom-up design","Sequencing","Desk checking","Stepwise refinement"],a:3,
+  why:"Stepwise refinement adds detail in stages until every step is simple enough to code."},
+ {o:2,q:"In a hierarchy chart, what does the box at the top represent?",
+  opts:["The main module, which stands for the whole problem.","The first instruction to be executed.","The input to the program.","A decision with two exits."],a:0,
+  why:"The chart shows structure. The top box is the whole problem, and each level below shows the modules it is split into."},
+ {o:3,q:"Which of the following should NOT be included in a problem definition?",
+  opts:["What the problem is","Who is affected by the problem","The effects of the problem","The causes of the problem"],a:3,
+  why:"Causes are worked out during the analysis, not stated in the definition."},
+ {o:3,q:"In which stage are the inputs, processing and outputs of a problem identified?",
+  opts:["Problem analysis","Problem definition","Select and justify the optimal solution","Implementation and review"],a:0,
+  why:"Analysis studies the problem in detail, including its inputs, processing, outputs and requirements."},
+ {o:4,q:"An algorithm meant to find the average of any three numbers gives the right answer only when the numbers are 4, 6 and 8. Which property does it lack?",
+  opts:["A finite number of steps","A general solution","A clear flow of control","Enough steps"],a:1,
+  why:"A general solution works for every valid set of data, not just one."},
+ {o:4,q:"Which property is broken by the step “Add a few of the numbers together”?",
+  opts:["A finite number of steps","A general solution","Clearly defined and unambiguous steps","Flow of control"],a:2,
+  why:"“A few” could mean different numbers to different people, so the step is ambiguous."},
+ {o:5,q:"Which flowchart symbol has two exits, labelled Yes and No?",
+  opts:["Rectangle","Parallelogram","Oval","Diamond"],a:3,
+  why:"The diamond is the decision symbol. Each exit is taken depending on the condition."},
+ {o:5,q:"Which way of representing an algorithm uses numbered steps in everyday language that a non-programmer can follow?",
+  opts:["Pseudocode","Flowchart","Narrative","Trace table"],a:2,
+  why:"A narrative is written in plain language. A trace table is a testing tool, not a representation."},
+ {o:6,q:"Which of these statements is an assignment?",
+  opts:["READ score","PRINT score","IF score > 5 THEN","score = score + 5"],a:3,
+  why:"An assignment works out the right-hand side and stores the result in the variable on the left."},
+ {o:6,q:"Which construct is used when an algorithm must choose between two courses of action?",
+  opts:["Sequence","Selection","Iteration","Input"],a:1,
+  why:"Selection tests a condition and follows one of the paths."},
+ {o:7,q:`What is printed by this algorithm?<pre>a = 5
+b = 2
+a = a + b
+b = a * b
+PRINT a, b</pre>`,
+  opts:["5 2","7 10","7 14","7 4"],a:2,
+  why:"a becomes 7 first. b is then worked out using the new value of a: 7 × 2 = 14."},
+ {o:8,q:"An algorithm should accept a quantity from 1 to 50. Which value is erroneous test data?",
+  opts:["75","1","25","50"],a:0,
+  why:"75 is outside the allowed range, so it should be rejected. 1 and 50 are extreme data, and 25 is normal data."},
+ {o:9,q:"When developing an algorithm from a case problem, what should be done first?",
+  opts:["Write the C program.","Identify the inputs, processing and outputs.","Complete a trace table.","Choose the test data."],a:1,
+  why:"The inputs, processing and outputs come from the case and tell you what the algorithm must do."},
+ {o:10,q:"Which of the following is an example of a syntax error?",
+  opts:["A loop that runs one time too few","Using > where >= was needed","Misspelling a keyword, such as prnt for PRINT","Dividing a total by the wrong number"],a:2,
+  why:"A misspelt keyword breaks the rules of the language, so the translator reports it. The other three are logic errors."},
+ /* ---- 2.1 ---- */
+ {o:1,q:"In problem-solving, what is a problem?",
+  opts:["A situation where what exists differs from what is wanted, and the way to fix it is not yet known","Any error message produced by a compiler","A list of instructions for a computer","A fault in the computer’s hardware"],a:0,
+  why:"A problem is a gap between the current state and the desired state."},
+ {o:1,q:"Which statement about algorithms is true?",
+  opts:["An algorithm must be written in C.","An algorithm can be expressed without using any programming language.","An algorithm is a type of flowchart symbol.","An algorithm is produced by a compiler."],a:1,
+  why:"An algorithm can be written as a narrative, a flowchart or pseudocode. It does not depend on any language."},
+ {o:1,q:"What is the role of an algorithm in the problem-solving process?",
+  opts:["To replace the need for testing","To describe the hardware needed","To set out a step-by-step plan for the solution that can be checked before coding","To list the users of the system"],a:2,
+  why:"The algorithm is the plan for the solution. It is checked first and then coded."},
+ {o:1,q:"Which of these is a program?",
+  opts:["A numbered list of steps written in English","A flowchart drawn on paper","A hierarchy chart of modules","Instructions written in C that a computer can execute"],a:3,
+  why:"A program is an algorithm expressed in a programming language. The other three are ways of planning."},
+ {o:1,q:"Problem-solving is best described as:",
+  opts:["the process of moving from a stated problem to a solution that has been checked and works","typing code as quickly as possible","choosing a programming language","drawing flowcharts"],a:0,
+  why:"Problem-solving covers the whole journey from the problem to a working, checked solution."},
+ {o:1,q:"A school canteen has long queues at lunch. Which statement is a solution, not the problem?",
+  opts:["Students wait too long to be served.","Introduce a pre-order system so meals are ready on arrival.","Many students miss part of their lunch break.","Staff are under pressure at lunchtime."],a:1,
+  why:"The pre-order system is a way of fixing the situation. The other three describe the problem and its effects."},
+ {o:1,q:"Why is an algorithm usually written before the program?",
+  opts:["The compiler cannot run without one.","Algorithms run faster than programs.","So the logic can be planned and checked before any code is written.","Programs cannot contain loops."],a:2,
+  why:"Planning the steps first means mistakes are found before time is spent coding."},
+ {o:1,q:"An algorithm must always be:",
+  opts:["drawn as a flowchart","written with a FOR loop","at least ten steps long","a finite sequence of clear steps that solves the problem"],a:3,
+  why:"That is the definition of an algorithm. It can take any form and be any length."},
+ {o:1,q:"A solution turns the inputs into the required outputs. For the problem “find the area of a rectangle”, what are the inputs?",
+  opts:["The length and the width","The area","The perimeter","The word “rectangle”"],a:0,
+  why:"The length and width are given. The area is the output the solution produces."},
+ {o:1,q:"Which of these is NOT an example of an algorithm?",
+  opts:["A recipe for baking bread","A photograph of a cake","Directions from home to school","Steps for changing a tyre"],a:1,
+  why:"A photograph contains no steps. The others are ordered instructions that achieve a goal."},
+ {o:1,q:"A student writes the steps to calculate tax on paper, then types them in C. The written steps are the ___ and the C version is the ___.",
+  opts:["program, algorithm","solution, problem","algorithm, program","problem, program"],a:2,
+  why:"The plan is the algorithm. Once it is written in a programming language, it is a program."},
+ {o:1,q:"Which statement best explains why algorithms are important?",
+  opts:["They make computers faster.","They remove the need for programmers.","They are only used in mathematics.","They let a solution be planned, checked and shared before it is coded."],a:3,
+  why:"An algorithm can be read, tested and corrected by people before any code exists."},
+ {o:1,q:"In what order are these normally produced?",
+  opts:["Problem, algorithm, program","Program, algorithm, problem","Algorithm, problem, program","Problem, program, algorithm"],a:0,
+  why:"First the problem is understood, then the algorithm is planned, then it is coded as a program."},
+
+ /* ---- 2.2 ---- */
+ {o:2,q:"Which approach starts with the whole problem and splits it into smaller sub-problems?",
+  opts:["Top-down","Bottom-up","Sequencing","Tracing"],a:0,
+  why:"Top-down design works downwards from the whole problem."},
+ {o:2,q:"Which is an advantage of top-down design?",
+  opts:["Every module must be written before the problem is understood.","A large problem becomes a set of smaller, manageable parts.","No planning is needed.","It removes the need for testing."],a:1,
+  why:"Splitting the problem makes each part easier to understand, solve and share out."},
+ {o:2,q:"Which is an advantage of bottom-up design?",
+  opts:["The whole problem is understood first.","It needs no testing.","Existing, tested modules can be reused and combined.","It always produces fewer modules."],a:2,
+  why:"Bottom-up builds from parts, so routines that already work can be put together."},
+ {o:2,q:"A hierarchy chart shows:",
+  opts:["the order in which instructions are executed","the values of variables during a dry run","the test data for a program","the modules of a solution and how they are related"],a:3,
+  why:"It shows structure: which module is made up of which sub-modules."},
+ {o:2,q:"In a hierarchy chart, the boxes directly below a module represent:",
+  opts:["the sub-modules that module is split into","the decisions in that module","the outputs of the program","the variables it uses"],a:0,
+  why:"Each level down shows the parts that the box above is broken into."},
+ {o:2,q:"Which statement about stepwise refinement is true?",
+  opts:["It combines finished modules into one program.","It adds detail to steps in stages until each one can be coded.","It is used only after coding.","It is a type of test data."],a:1,
+  why:"Each step is rewritten in more detail, repeatedly, until it is simple enough to code."},
+ {o:2,q:"A designer writes “Get data, Process data, Show results”, then rewrites “Process data” as smaller, more detailed steps. Which method is this?",
+  opts:["Bottom-up design","Desk checking","Stepwise refinement","Iteration"],a:2,
+  why:"Adding detail to one step at a time is stepwise refinement."},
+ {o:2,q:"Which of these shows top-down design for a school report program?",
+  opts:["Write each subject’s mark routine, then join them.","Test the program with extreme data.","Draw a trace table.","Start with “Produce report” and split it into “Enter marks”, “Calculate averages” and “Print report”."],a:3,
+  why:"Starting with the whole job and splitting it downwards is top-down. The first option is bottom-up."},
+ {o:2,q:"What is a disadvantage of bottom-up design?",
+  opts:["The parts may not fit together well because the whole was not planned first.","Problems are never broken into parts.","It cannot use modules.","It requires a trace table."],a:0,
+  why:"Without an overall plan, separately built parts can be hard to join."},
+ {o:2,q:"In a payroll hierarchy chart, “Calculate pay” has two boxes beneath it. What does this tell you?",
+  opts:["Calculate pay runs twice.","Calculate pay is made up of two smaller modules.","Calculate pay contains a loop.","Calculate pay is the main module."],a:1,
+  why:"Boxes below a module are its sub-modules. A hierarchy chart does not show loops or order."},
+ {o:2,q:"A programmer builds a new program by joining three routines written earlier for other projects. Which approach is most likely being used?",
+  opts:["Top-down","Stepwise refinement","Bottom-up","Sequencing"],a:2,
+  why:"Combining existing parts into a whole is bottom-up."},
+ {o:2,q:"Which of these does a hierarchy chart NOT show?",
+  opts:["The main module","The sub-modules","Which module belongs to which","The order in which the steps are carried out"],a:3,
+  why:"A hierarchy chart shows structure only. The order of steps is shown by a flowchart or pseudocode."},
+
+ /* ---- 2.3 ---- */
+ {o:3,q:"What is the first stage of the problem-solving process?",
+  opts:["Problem definition","Problem analysis","Implementation and review","Select and justify the optimal solution"],a:0,
+  why:"You must state the problem clearly before anything else."},
+ {o:3,q:"Which is a functional requirement for an online shop?",
+  opts:["Pages load within 3 seconds.","Allow customers to add items to a cart.","The site is available 99% of the time.","Only logged-in users can see their orders."],a:1,
+  why:"Adding items to a cart is something the system does. The others are qualities or constraints."},
+ {o:3,q:"Which stage comes immediately after “identify and evaluate possible solutions”?",
+  opts:["Problem analysis","Implementation and review","Select and justify the optimal solution","Problem definition"],a:2,
+  why:"Once the options are evaluated, the best one is selected and the choice is justified."},
+ {o:3,q:"Which non-functional requirement is stated in a measurable way?",
+  opts:["The system should be fast.","The system should be easy to use.","The system should be secure.","A search returns results within 2 seconds."],a:3,
+  why:"Only the last one can be tested. “Fast”, “easy” and “secure” need a measure."},
+ {o:3,q:"In which stage is the chosen solution built and then checked against the original problem?",
+  opts:["Implementation and review","Problem definition","Problem analysis","Identify and evaluate possible solutions"],a:0,
+  why:"Implementation builds the solution. Review checks that it solves the problem."},
+ {o:3,q:"A problem definition should state:",
+  opts:["the causes of the problem","what the problem is, who is affected and what its effects are","the program code","the test data"],a:1,
+  why:"Causes are left for the analysis. Code and test data come much later."},
+ {o:3,q:"Why are several possible solutions identified before one is chosen?",
+  opts:["To make the project longer","Because the first idea is always wrong","So their advantages and disadvantages can be compared","To avoid writing a problem definition"],a:2,
+  why:"Comparing options gives a sound reason for the final choice."},
+ {o:3,q:"Which statement is a non-functional requirement?",
+  opts:["Print a receipt for each sale.","Record each customer’s name.","Calculate the total cost.","Only staff with a valid password can open the system."],a:3,
+  why:"Restricting access is a security constraint. The others are things the system does."},
+ {o:3,q:"Giving reasons why one solution is better than the others happens in which stage?",
+  opts:["Select and justify the optimal solution","Problem definition","Implementation and review","Problem analysis"],a:0,
+  why:"To justify is to give reasons for the choice."},
+ {o:3,q:"Which is the correct order of the first three stages?",
+  opts:["Analysis, definition, identify and evaluate solutions","Definition, analysis, identify and evaluate solutions","Identify and evaluate solutions, definition, analysis","Definition, implementation, analysis"],a:1,
+  why:"Define the problem, analyse it, then look for possible solutions."},
+ {o:3,q:"Which statement belongs in the problem analysis rather than the problem definition?",
+  opts:["Members are angry about incorrect fines.","Library staff are affected.","The inputs are the due date and the return date.","The library is losing income."],a:2,
+  why:"Inputs, processing and outputs are worked out in the analysis. The others describe the problem, who it affects and its effects."},
+
+ /* ---- 2.4 ---- */
+ {o:4,q:"How many properties of a well-designed algorithm does the syllabus list?",
+  opts:["Four","Two","Three","Five"],a:0,
+  why:"General solution, clearly defined and unambiguous steps, a finite number of steps, and flow of control."},
+ {o:4,q:"An algorithm that never stops breaks which property?",
+  opts:["General solution","Finite number of steps","Unambiguous steps","Flow of control"],a:1,
+  why:"A well-designed algorithm must always come to an end."},
+ {o:4,q:"The step “Cook until it looks done” breaks which property?",
+  opts:["Finite number of steps","General solution","Clearly defined and unambiguous steps","Flow of control"],a:2,
+  why:"“Looks done” means different things to different people."},
+ {o:4,q:"Which of these is a general solution for adding two numbers?",
+  opts:["PRINT 4 + 7","PRINT \"The answer is 11\"","total = 4 + 7","READ a, b then PRINT a + b"],a:3,
+  why:"Only the last one works for any two numbers entered."},
+ {o:4,q:"Which property means that the order in which the steps are carried out is clear?",
+  opts:["Flow of control","Finite number of steps","General solution","Unambiguous steps"],a:0,
+  why:"Flow of control is about moving clearly from one step to the next."},
+ {o:4,q:"Which rewrite makes the step “Add some numbers” unambiguous?",
+  opts:["Add numbers quickly","Add the three numbers entered by the user","Add numbers if needed","Add a few numbers"],a:1,
+  why:"It says exactly which numbers and how many."},
+ {o:4,q:`Which property is broken here?<pre>count = 10
+WHILE count > 0 DO
+   PRINT count
+   count = count + 1
+ENDWHILE</pre>`,
+  opts:["General solution","Unambiguous steps","Finite number of steps","Flow of control"],a:2,
+  why:"count goes up, not down, so count > 0 is always true and the loop never ends."},
+ {o:4,q:"Why must an algorithm be a general solution?",
+  opts:["So that it has fewer steps","So that it can be drawn as a flowchart","So that it runs faster","So that it works for any valid input, not just one set of data"],a:3,
+  why:"An algorithm that only works for one example does not solve the problem."},
+ {o:4,q:"Which instruction is clearly defined and unambiguous?",
+  opts:["Multiply the price by the quantity.","Make the price bigger.","Do something with the total.","Fix the numbers."],a:0,
+  why:"It states exactly which values and which operation."},
+ {o:4,q:"An algorithm says “go back to the discount step”, but there are two discount steps. Which property is broken?",
+  opts:["Finite number of steps","Flow of control","General solution","Input"],a:1,
+  why:"It is not clear which step comes next, so the flow of control is unclear."},
+ {o:4,q:"Which of these is NOT a property of a well-designed algorithm?",
+  opts:["A general solution","A finite number of steps","It is written in pseudocode","Clearly defined steps"],a:2,
+  why:"An algorithm may be written as a narrative, a flowchart or pseudocode."},
+ {o:4,q:"Every step of an algorithm is clear, it always ends and its order is clear, but it only works for a class of exactly 10 students. What does it lack?",
+  opts:["A finite number of steps","Unambiguous steps","Flow of control","A general solution"],a:3,
+  why:"It should work for a class of any size."},
+
+ /* ---- 2.5 ---- */
+ {o:5,q:"Which flowchart symbol is used for Start and Stop?",
+  opts:["Oval (terminator)","Rectangle","Diamond","Parallelogram"],a:0,
+  why:"The terminator marks where the algorithm begins and ends."},
+ {o:5,q:"Which symbol is used for the step <code>total = total + price</code>?",
+  opts:["Diamond","Rectangle (process)","Parallelogram","Oval"],a:1,
+  why:"A calculation or assignment is a process."},
+ {o:5,q:"What do the arrows in a flowchart show?",
+  opts:["The variables used","The test data","The direction of flow from one step to the next","The output"],a:2,
+  why:"Flow lines show the order in which the steps are carried out."},
+ {o:5,q:"Which representation is closest to program code?",
+  opts:["Narrative","Flowchart","Hierarchy chart","Pseudocode"],a:3,
+  why:"Pseudocode uses code-like keywords and structure, so it converts easily to a program."},
+ {o:5,q:"Which is an advantage of a flowchart?",
+  opts:["The flow of control, including loops and branches, can be seen at a glance.","It can be run by the computer.","It is always shorter than pseudocode.","It needs no symbols."],a:0,
+  why:"Its visual layout makes the flow of control easy to follow."},
+ {o:5,q:"The step <code>PRINT \"Total: \", total</code> is drawn using which symbol?",
+  opts:["Rectangle","Parallelogram","Diamond","Oval"],a:1,
+  why:"Printing is output, and the parallelogram is the input/output symbol."},
+ {o:5,q:"Which are the three ways of representing an algorithm named in the syllabus?",
+  opts:["C, Python and Java","Trace tables, test plans and IPO charts","Narrative, flowcharts and pseudocode","Hierarchy charts, flowcharts and code"],a:2,
+  why:"Narrative, flowcharts and pseudocode."},
+ {o:5,q:"Which statement about a narrative is true?",
+  opts:["It uses standard symbols.","It must follow C syntax.","It is a diagram.","It is written as numbered steps in everyday language."],a:3,
+  why:"A narrative is plain-language steps that a non-programmer can follow."},
+ {o:5,q:"How many exits does a decision symbol normally have?",
+  opts:["Two","One","Three","None"],a:0,
+  why:"One for Yes (true) and one for No (false)."},
+ {o:5,q:"Which is a disadvantage of a flowchart?",
+  opts:["It shows the flow of control clearly.","It can take a long time to draw and change for a large algorithm.","It uses standard symbols.","Non-programmers can follow it."],a:1,
+  why:"Large flowcharts become hard to draw and edit. The other options are advantages."},
+ {o:5,q:"<code>IF age >= 18 THEN</code> is an example of:",
+  opts:["narrative","a flowchart","pseudocode","a hierarchy chart"],a:2,
+  why:"It is structured, code-like text that is not tied to one language."},
+
+ /* ---- 2.6 ---- */
+ {o:6,q:"Which control construct carries out steps one after another, each once, in the order written?",
+  opts:["Sequence","Selection","Iteration","Assignment"],a:0,
+  why:"That is sequence."},
+ {o:6,q:"Which of these is an input statement?",
+  opts:["PRINT total","READ price","total = 0","IF price > 0 THEN"],a:1,
+  why:"READ brings data into a variable."},
+ {o:6,q:"In <code>total = total + price</code>, what happens first?",
+  opts:["total is printed","price is read","total + price is worked out","total is set to zero"],a:2,
+  why:"The right-hand side is evaluated first, then the result is stored in total."},
+ {o:6,q:"Which loop is unbounded?",
+  opts:["FOR i = 1 TO 10","FOR j = 1 TO 5","FOR k = 1 TO n, where n is read before the loop","WHILE answer <> \"N\""],a:3,
+  why:"The WHILE loop stops only when the user types N, which is not known in advance. The FOR loops all have a known count when they start."},
+ {o:6,q:"Why is a WHILE loop controlled by a sentinel called unbounded?",
+  opts:["The number of repetitions is not known before the loop starts.","It has no condition.","It always runs forever.","It runs exactly once."],a:0,
+  why:"It stops whenever the sentinel happens to be entered."},
+ {o:6,q:"Which value is the best sentinel when entering students’ ages?",
+  opts:["15","-1","18","12"],a:1,
+  why:"No real age is negative, so −1 cannot be mistaken for real data."},
+ {o:6,q:"Which construct is shown by <code>IF mark >= 50 THEN PRINT \"Pass\" ELSE PRINT \"Fail\" ENDIF</code>?",
+  opts:["Sequence","Iteration","Selection","Input"],a:2,
+  why:"A condition decides which of two paths is taken."},
+ {o:6,q:"Which of these is an output statement?",
+  opts:["READ name","name = \"Ann\"","IF name = \"Ann\" THEN","PRINT name"],a:3,
+  why:"PRINT displays a value."},
+ {o:6,q:`How many times is PRINT carried out?<pre>FOR i = 1 TO 6 DO
+   PRINT i
+ENDFOR</pre>`,
+  opts:["6","5","7","1"],a:0,
+  why:"i takes the values 1, 2, 3, 4, 5 and 6."},
+ {o:6,q:"What are the three basic control constructs?",
+  opts:["Input, output and assignment","Sequence, selection and iteration","IF, WHILE and FOR","Narrative, flowchart and pseudocode"],a:1,
+  why:"Every structured algorithm is built from sequence, selection and iteration."},
+ {o:6,q:"Iteration means:",
+  opts:["choosing between paths","storing a value","repeating one or more steps","reading data"],a:2,
+  why:"Iteration is repetition."},
+
+ /* ---- 2.7 ---- */
+ {o:7,q:`What is printed?<pre>x = 4
+y = x * 2
+x = y - 1
+PRINT x, y</pre>`,
+  opts:["7 8","4 8","8 7","3 8"],a:0,
+  why:"y = 8, then x = 8 − 1 = 7."},
+ {o:7,q:`What is printed?<pre>n = 15
+IF n MOD 2 = 0 THEN
+   PRINT "Even"
+ELSE
+   PRINT "Odd"
+ENDIF</pre>`,
+  opts:["Even","Odd","15","Even Odd"],a:1,
+  why:"15 MOD 2 is 1, so the condition is false and the ELSE runs."},
+ {o:7,q:`What is printed?<pre>count = 0
+FOR i = 1 TO 5 DO
+   count = count + 2
+ENDFOR
+PRINT count</pre>`,
+  opts:["5","2","10","12"],a:2,
+  why:"2 is added 5 times."},
+ {o:7,q:`What is printed for the input <code>6 9</code>?<pre>READ a, b
+IF a > b THEN
+   PRINT a
+ELSE
+   PRINT b
+ENDIF</pre>`,
+  opts:["6","6 9","a","9"],a:3,
+  why:"6 > 9 is false, so b is printed. The algorithm prints the larger number."},
+ {o:7,q:`What is printed for the input <code>3 5 2 0</code>?<pre>total = 0
+READ n
+WHILE n &lt;&gt; 0 DO
+   total = total + n
+   READ n
+ENDWHILE
+PRINT total</pre>`,
+  opts:["10","3","0","5"],a:0,
+  why:"3 + 5 + 2 = 10. The sentinel 0 ends the loop and is not added."},
+ {o:7,q:`What is printed?<pre>mark = 75
+IF mark >= 80 THEN
+   PRINT "A"
+ELSE IF mark >= 70 THEN
+   PRINT "B"
+ELSE
+   PRINT "C"
+ENDIF</pre>`,
+  opts:["A","B","C","A B"],a:1,
+  why:"75 >= 80 is false. 75 >= 70 is true, so B is printed and the rest is skipped."},
+ {o:7,q:`Which values are printed?<pre>FOR i = 1 TO 3 DO
+   PRINT i * i
+ENDFOR</pre>`,
+  opts:["1 2 3","2 4 6","1 4 9","3 6 9"],a:2,
+  why:"1 × 1, 2 × 2 and 3 × 3."},
+ {o:7,q:`What is printed?<pre>k = 1
+WHILE k < 20 DO
+   k = k * 3
+ENDWHILE
+PRINT k</pre>`,
+  opts:["20","9","18","27"],a:3,
+  why:"k becomes 3, then 9, then 27. 27 < 20 is false, so the loop ends."},
+ {o:7,q:`What does this algorithm do?<pre>READ a, b, c
+PRINT (a + b + c) / 3</pre>`,
+  opts:["Prints the average of three numbers","Prints the sum of three numbers","Prints the largest of three numbers","Prints a + b, then c divided by 3"],a:0,
+  why:"The brackets make it add all three first, then divide by 3."},
+ {o:7,q:`What is printed for the input <code>7 12 5 9</code>?<pre>big = 0
+FOR i = 1 TO 4 DO
+   READ x
+   IF x > big THEN
+      big = x
+   ENDIF
+ENDFOR
+PRINT big</pre>`,
+  opts:["7","12","9","33"],a:1,
+  why:"big keeps the largest value seen so far, which ends as 12."},
+ {o:7,q:`What is printed?<pre>p = 2
+q = 5
+IF p > 1 AND q < 5 THEN
+   PRINT "Yes"
+ELSE
+   PRINT "No"
+ENDIF</pre>`,
+  opts:["Yes","Yes No","No","Nothing is printed"],a:2,
+  why:"q < 5 is false, so the whole AND condition is false."},
+ {o:7,q:`What is printed?<pre>a = 2
+b = a + 3
+c = b * 2
+PRINT b</pre>`,
+  opts:["2","10","2 5 10","5"],a:3,
+  why:"Only b is printed, and b is 5. c is calculated but never printed."},
+
+ /* ---- 2.8 ---- */
+ {o:8,q:"What does it mean for an algorithm to be correct?",
+  opts:["It achieves its stated objective for all valid input.","It has no syntax errors.","It runs quickly.","It uses a WHILE loop."],a:0,
+  why:"Correctness is judged against what the algorithm is supposed to do."},
+ {o:8,q:"A test plan should include:",
+  opts:["only the program code","the test data, the reason for each test and the expected result","the hierarchy chart","the problem definition"],a:1,
+  why:"Each test case states what data is used, why, and what should happen."},
+ {o:8,q:"An algorithm should accept marks from 0 to 100. Which of these is normal test data?",
+  opts:["0","100","64","-3"],a:2,
+  why:"64 is a typical valid value. 0 and 100 are extreme, and −3 is erroneous."},
+ {o:8,q:"Why should extreme (boundary) data be included in a test plan?",
+  opts:["It is easier to type.","It is always rejected.","It checks typical values.","Mistakes such as using > instead of >= show up at the boundaries."],a:3,
+  why:"Boundary values are where wrong comparison operators are exposed."},
+ {o:8,q:"An algorithm runs without any error message but gives the wrong answer. This is a:",
+  opts:["logic error","syntax error","hardware fault","sentinel"],a:0,
+  why:"It follows the rules of the language, but the steps are wrong."},
+ {o:8,q:"In a trace table, a new row is usually written when:",
+  opts:["the algorithm ends","a variable changes value","a comment is written","the program is compiled"],a:1,
+  why:"The trace records each change in the variables’ values."},
+ {o:8,q:"An age must be from 5 to 18. Which of these is erroneous test data?",
+  opts:["5","18","\"ten\"","12"],a:2,
+  why:"Text where a number is required should be rejected."},
+ {o:8,q:"An algorithm meant to add the numbers 1 to 5 uses <code>FOR i = 1 TO 4</code>. What will a dry run show?",
+  opts:["A total of 15","An infinite loop","A syntax error","A total of 10, so the algorithm is not correct"],a:3,
+  why:"It adds 1 to 4 only, giving 10 instead of the expected 15."},
+ {o:8,q:"What should happen when erroneous data is entered?",
+  opts:["It should be rejected, ideally with a message.","It should be processed normally.","It should end the program without a message.","It should be added to the total."],a:0,
+  why:"Invalid data must not be processed as if it were valid."},
+ {o:8,q:"A test has an expected result of 3, but the trace gives 4. What should be done?",
+  opts:["Change the expected result to 4.","Find and correct the error in the algorithm, then test again.","Ignore it, since the difference is small.","Remove that test from the plan."],a:1,
+  why:"A mismatch shows the algorithm is not correct."},
+ {o:8,q:"Which column would you NOT expect in a trace table?",
+  opts:["A column for each variable","An output column","A column for the programmer’s name","A column for a condition such as x > 5"],a:2,
+  why:"A trace table records values, conditions and output."},
+ {o:8,q:`This algorithm is meant to add three numbers. For the input <code>2 4 6</code> it prints 6. What is the error?<pre>total = 0
+FOR i = 1 TO 3 DO
+   READ n
+   total = n
+ENDFOR
+PRINT total</pre>`,
+  opts:["The loop should run 4 times.","total should start at 1.","READ should be outside the loop.","total = n should be total = total + n."],a:3,
+  why:"total is replaced each time instead of being added to, so it ends as the last number."},
+
+ /* ---- 2.9 ---- */
+ {o:9,q:"What does IPO stand for?",
+  opts:["Input, Processing, Output","Instruction, Program, Output","Input, Program, Operation","Iteration, Process, Order"],a:0,
+  why:"Listing the input, processing and output is the first step in developing an algorithm."},
+ {o:9,q:"Why are counters and totals initialised before a loop?",
+  opts:["To make the loop run faster","So they have a known starting value before anything is added to them","Because the compiler sets everything to zero","So that the loop ends"],a:1,
+  why:"Without a starting value, the first addition has nothing reliable to add to."},
+ {o:9,q:"A case says: “Read the prices of 20 items and print their total.” Which loop is most suitable?",
+  opts:["A WHILE loop with a sentinel","No loop is needed","A FOR loop from 1 to 20","An IF statement"],a:2,
+  why:"The number of items is known, so a bounded FOR loop fits."},
+ {o:9,q:"A case says: “Students with a mark of 50 or more pass.” Which condition is correct?",
+  opts:["mark > 50","mark < 50","mark = 50","mark >= 50"],a:3,
+  why:"“50 or more” includes 50 itself."},
+ {o:9,q:"Where should the statement that prints a final total be placed?",
+  opts:["After the loop ends","Inside the loop","Before the loop","Before the total is initialised"],a:0,
+  why:"The total is only complete once every value has been added."},
+ {o:9,q:"A case says: “Customers who buy more than 5 items get a discount.” Which construct handles the discount?",
+  opts:["Iteration","Selection","Sequence only","Input"],a:1,
+  why:"A condition decides whether the discount applies."},
+ {o:9,q:"In a sentinel-controlled loop, where are the two READ statements placed?",
+  opts:["Both inside the loop","Both after the loop","One before the loop and one at the end of the loop body","One before the loop and one after it"],a:2,
+  why:"The first value is read before the test, and each next value is read at the end of the body."},
+ {o:9,q:"For the case “calculate and display the average of 10 marks”, what is the output?",
+  opts:["The 10 marks","The counter","The total","The average"],a:3,
+  why:"The output is what the case says must be displayed."},
+ {o:9,q:"After writing an algorithm from a case, what should you do next?",
+  opts:["Check it with test data or a trace table.","Discard the case.","Start a new algorithm.","Remove the loop."],a:0,
+  why:"An algorithm must be checked before it is coded."},
+ {o:9,q:"A case asks for the number of students who scored above 80. What is needed?",
+  opts:["A sentinel only","A counter that starts at 0 and goes up by 1 when a mark is above 80","A total of all the marks","A flowchart symbol"],a:1,
+  why:"Counting means adding 1 each time the condition is met."},
+ {o:9,q:"Which line correctly applies a 15% discount to cost?",
+  opts:["cost = cost + 15","cost = 15%","cost = cost * 0.85","cost = cost / 15"],a:2,
+  why:"Paying 85% of the cost is the same as taking 15% off."},
+ {o:9,q:"A case says: “Keep reading temperatures until 999 is entered.” What is 999?",
+  opts:["The total","The first reading","A counter","The sentinel"],a:3,
+  why:"999 is a special value that ends the input."},
+ {o:9,q:"Which statement about developing algorithms from case problems is true?",
+  opts:["The algorithm should work for any valid data described in the case, not just the example values.","Only the example values in the case need to work.","The algorithm must be written in C.","Loops should be avoided."],a:0,
+  why:"That is what makes it a general solution."},
+
+ /* ---- 2.10 ---- */
+ {o:10,q:"What is program logic?",
+  opts:["The order of the instructions and the conditions under which each is carried out","The programming language used","The speed of the computer","The comments in the code"],a:0,
+  why:"Logic is about what happens, in what order, and when."},
+ {o:10,q:"Why must the instructions in a program be logically sequenced?",
+  opts:["To use less memory","Because the computer carries them out exactly in the order given","So that the code looks neat","Because the compiler sorts them"],a:1,
+  why:"The computer cannot rearrange steps to fix a wrong order."},
+ {o:10,q:"Which is a benefit of developing the logic before coding?",
+  opts:["The program needs no testing.","The program will have no syntax errors.","Errors can be found and fixed on paper, where they cost less.","The program runs faster."],a:2,
+  why:"Mistakes in the plan are cheaper to fix than mistakes in finished code."},
+ {o:10,q:"A program calculates the cost before it reads the quantity. What kind of error is this?",
+  opts:["Syntax error","Hardware error","Translation error","Logic error"],a:3,
+  why:"The steps are in the wrong order, so the result is wrong even though the program runs."},
+ {o:10,q:"Which error will the compiler report?",
+  opts:["A missing semicolon in C","Using > instead of >=","Adding instead of multiplying","A loop that runs once too often"],a:0,
+  why:"A missing semicolon breaks the language’s rules. The others are logic errors."},
+ {o:10,q:"Why is program logic said to be language-independent?",
+  opts:["It only works in C.","The same algorithm can be coded in any programming language.","It contains no instructions.","It is written by the compiler."],a:1,
+  why:"The plan does not depend on the language used to code it."},
+ {o:10,q:"Which statement about logic errors is true?",
+  opts:["The compiler always finds them.","They stop the program from running.","They are found by testing or by checking the logic.","They are spelling mistakes."],a:2,
+  why:"The program runs normally, so only testing or careful checking reveals them."},
+ {o:10,q:"Which order of steps is logical for finding an average?",
+  opts:["Divide by the count, add the numbers, read the numbers","Add the numbers, read the numbers, divide by the count","Read the numbers, divide by the count, add the numbers","Read the numbers, add them, divide by the count"],a:3,
+  why:"Each step needs the results of the steps before it."},
+ {o:10,q:"How does developing the logic first help when a program is changed later?",
+  opts:["The documented logic makes the code easier to understand and change.","It means the program never needs changing.","It removes the need for comments.","It makes the program shorter."],a:0,
+  why:"A clear plan helps anyone who maintains the program."},
+ {o:10,q:"Which of these is an example of a logic error?",
+  opts:["Typing prnt instead of PRINT","Placing average = total / count inside the loop, before all the numbers are added","Leaving out a closing bracket","Spelling while as whle"],a:1,
+  why:"The program runs, but the average is worked out too early. The others are syntax errors."},
+ {o:10,q:"A computer cannot guess what the programmer meant. This is why:",
+  opts:["programs need comments","flowcharts use symbols","the logic must be complete and correct before coding","compilers are slow"],a:2,
+  why:"The computer follows the instructions exactly as given."},
+ {o:10,q:"Which is NOT a reason for developing the logic of a program?",
+  opts:["To find errors before coding","To make the program easier to test","To plan the order of the instructions","To choose the colour of the screen"],a:3,
+  why:"Logic is about the steps and their order, not the appearance."},
+ {o:10,q:"An algorithm is described as “logically sequenced instructions”. This means:",
+  opts:["each instruction comes after everything it depends on","the instructions are in alphabetical order","every instruction is a loop","the instructions are numbered"],a:0,
+  why:"Each step can only use values that earlier steps have already produced."}
+];
+MCQ.sort((p,q) => p.o - q.o);let fid = 0;
+const fNum = (ans, o) => '<input class="fill" id="f' + (++fid) + '" inputmode="decimal" autocomplete="off" aria-label="Your answer" data-ans="' + ans + '"' + (o ? ' data-o="' + o + '"' : '') + '>';
+const fSel = (ans, options, o) => '<select class="fill" id="f' + (++fid) + '" aria-label="Your answer" data-ans="' + ans + '"' + (o ? ' data-o="' + o + '"' : '') + '><option value="">Choose…</option>' + options.map(v => '<option>' + v + '</option>').join("") + '</select>';
+const fTxt = (show, re) => '<input class="fill wide" id="f' + (++fid) + '" autocomplete="off" spellcheck="false" aria-label="Your answer" data-ans="' + show + '" data-re="' + re + '">';
+const SYMS = ["Oval","Parallelogram","Rectangle","Diamond"];
+const FC_RAIN = flow(480,442,[
+ ["t",160,20,"Start",90],["p",160,66,"count = 0",110],["io",160,112,"Read rain",110],["d",160,176,"rain <> -1?",140],
+ ["d",160,256,"rain > 25?",130],["p",160,330,"count = count + 1",160],["io",160,390,"Read rain",110],
+ ["io",400,260,"Print count",120],["t",400,320,"Stop",90]
+],[
+ ["M160 35V50"],["M160 81V96"],["M160 127V147"],["M160 204V227","Yes",178,220],["M160 284V314","Yes",178,305],
+ ["M160 345V374"],["M160 405V428H30V140H159"],["M225 256H270V360H161","No",244,248],["M230 176H400V244","No",254,168],["M400 275V304"]
+]);
+const fSelRe = (show, re, options, o) => '<select class="fill" id="f' + (++fid) + '" aria-label="Your answer" data-ans="' + show + '" data-re="' + re + '"' + (o ? ' data-o="' + o + '"' : '') + '><option value="">Choose…</option>' + options.map(v => '<option>' + v + '</option>').join("") + '</select>';
+const fNumRe = (show, re, o) => '<input class="fill" id="f' + (++fid) + '" inputmode="decimal" autocomplete="off" aria-label="Your answer" data-ans="' + show + '" data-re="' + re + '"' + (o ? ' data-o="' + o + '"' : '') + '>';
+const STAGES = ["Problem definition","Problem analysis","Identify and evaluate possible solutions","Select and justify the optimal solution","Implementation and review"];
+const PROPS = ["A general solution","Clearly defined and unambiguous steps","A finite number of steps","Flow of control"];
+const TERMS = ["Problem","Solution","Algorithm","Program"];
+const HC_SPORTS = `<div class="scroll"><svg class="fc" style="max-width:560px;min-width:480px" viewBox="0 0 560 200" role="img" aria-label="Hierarchy chart: Sports day system at the top. Below it: Record results, Calculate house points, Print standings. Below Calculate house points: Points for each event, Total for each house.">
+ <path class="l" d="M280 42V65M95 65H465M95 65V88M280 65V88M465 65V88M280 122V140M190 140H370M190 140V158M370 140V158"/>
+ <rect class="s" x="205" y="8" width="150" height="34"/><text x="280" y="29">Sports day system</text>
+ <rect class="s" x="10" y="88" width="170" height="34"/><text x="95" y="109">Record results</text>
+ <rect class="s" x="195" y="88" width="170" height="34"/><text x="280" y="109">Calculate house points</text>
+ <rect class="s" x="380" y="88" width="170" height="34"/><text x="465" y="109">Print standings</text>
+ <rect class="s" x="105" y="158" width="170" height="34"/><text x="190" y="179">Points for each event</text>
+ <rect class="s" x="285" y="158" width="170" height="34"/><text x="370" y="179">Total for each house</text>
+</svg></div>`;
+
+const SQ = [
+ /* ================= Topic 2A ================= */
+ {o:1, title:"The library fines",
+  intro:`<p>A community library charges $2 for each day a book is overdue, up to a maximum fine of $20 per book. Members complain that they are charged different amounts for books returned equally late. The librarian wants a program that reads the number of days a book is overdue and prints the fine.</p>`,
+  parts:[
+   {l:"(a)",o:1,m:2,q:"Match each statement to the correct term.",
+    auto:`<div class="line">Members are charged different fines for books returned equally late: ${fSel("Problem",TERMS)}</div><div class="line">A program that works out every fine in the same way: ${fSel("Solution",TERMS)}</div>`,
+    note:`<p>The problem is the unwanted situation. The solution is the method that fixes it.</p>`},
+   {l:"(b)",o:1,m:2,q:"Match each description to the correct term.",
+    auto:`<div class="line">The list of steps that works out a fine, written before any code: ${fSel("Algorithm",TERMS)}</div><div class="line">Those same steps written in C: ${fSel("Program",TERMS)}</div>`,
+    note:`<p>An algorithm is the planned sequence of steps. A program is that algorithm expressed in a programming language.</p>`},
+   {l:"(c)",o:1,m:2,q:"Explain the role of an algorithm in solving this problem.",
+    ans:`<p>The algorithm sets out, as clear steps, exactly how a fine is worked out: read the days, multiply by $2, and limit the fine to $20. Because it is planned and checked before coding, every fine is then calculated in the same, correct way.</p>`,
+    how:["It sets out the solution as a sequence of clear steps.","It is checked before coding, so every fine is worked out the same way."]}
+  ]},
+ {o:1, title:"The school bus",
+  intro:`<p>Students often miss the school bus because they do not know when it will reach their stop. The school wants an app that shows the expected arrival time at each stop.</p>`,
+  parts:[
+   {l:"(a)",o:1,m:4,q:"Match each statement to the correct term.",
+    auto:`<div class="line">Students miss the bus because they do not know when it will arrive: ${fSel("Problem",TERMS)}</div><div class="line">An app that shows the expected arrival time at each stop: ${fSel("Solution",TERMS)}</div><div class="line">Read the bus’s position, calculate the time to each stop, display the times: ${fSel("Algorithm",TERMS)}</div><div class="line">The app’s instructions written in a programming language: ${fSel("Program",TERMS)}</div>`,
+    note:`<p>The problem is the situation. The solution is the method chosen to fix it. The algorithm is the step-by-step plan. The program is that plan in code.</p>`},
+   {l:"(b)",o:1,m:2,q:"Explain the difference between an algorithm and a program.",
+    ans:`<p>An algorithm is a plan: a finite sequence of clear steps that solves the problem, written in a form such as narrative, a flowchart or pseudocode, and not tied to any language. A program is that algorithm written in a programming language so that a computer can execute it.</p>`,
+    how:["Algorithm: a plan of steps, independent of any programming language.","Program: the algorithm written in a programming language so the computer can execute it."]}
+  ]},
+ {o:2, title:"Sports day",
+  intro:`<p>A school wants a program for sports day. It must record each student’s results, calculate the points for each house and print the final standings.</p>`,
+  parts:[
+   {l:"(a)",o:2,m:2,q:"The designer starts with “Sports day system” and splits it into three modules.",
+    auto:`<div class="line">Approach being used: ${fSel("Top-down",["Bottom-up","Top-down","Stepwise refinement"])}</div><div class="line">Diagram used to show the modules: ${fSel("Hierarchy chart",["Trace table","Flowchart","Hierarchy chart","Test plan"])}</div>`,
+    note:`<p>Starting with the whole problem and splitting it into parts is top-down design. A hierarchy chart shows the modules.</p>`},
+   {l:"(b)",o:2,m:4,q:"On paper, draw a hierarchy chart for the system with three modules below the main module. Then split “Calculate house points” into two sub-modules.",paper:true,
+    ans:HC_SPORTS,
+    how:["The main module is at the top.","Three modules are on the level below it.","Two sub-modules are under Calculate house points.","Lines connect each box to the module it belongs to."]}
+  ]},
+ {o:2, title:"The class average",
+  intro:`<p>A teacher wants an algorithm that calculates the average mark of a class. The number of students varies, and −1 is entered after the last mark.</p>`,
+  parts:[
+   {l:"(a)",o:2,m:3,q:"Using stepwise refinement, refine the step “Calculate the average mark” until every step can be coded.",rows:8,
+    ans:`<p><b>Level 1:</b> Calculate the average mark.</p><p><b>Level 2:</b> Add up the marks and count them. Divide the total by the count.</p><p><b>Level 3:</b></p><pre>total = 0
+count = 0
+READ mark
+WHILE mark &lt;&gt; -1 DO
+   total = total + mark
+   count = count + 1
+   READ mark
+ENDWHILE
+average = total / count</pre>`,
+    how:["Started with a single broad step.","Broke it into a few more detailed steps.","Refined those into steps that can be coded directly."]},
+   {l:"(b)",o:2,m:2,q:"State how bottom-up design differs from top-down design.",
+    ans:`<p>Top-down design starts with the whole problem and breaks it into smaller and smaller parts. Bottom-up design starts with the small parts, solves them, and combines them into the whole solution.</p>`,
+    how:["Top-down: starts with the whole problem and breaks it down.","Bottom-up: solves small parts first and combines them."]},
+   {l:"(c)",o:2,m:1,q:"A developer writes and tests the average calculation on its own first, then joins it to an existing report program. Which approach is this?",
+    auto:`<div class="line">Approach: ${fSel("Bottom-up",["Top-down","Bottom-up","Stepwise refinement"])}</div>`,
+    note:`<p>Building and testing a small part first, then combining it with other parts, is bottom-up design.</p>`}
+  ]},
+ {o:3, title:"The tuck shop",
+  intro:`<p>The owner of a school tuck shop finds that the cash collected each day often does not match the items sold. She wants a program that records each sale, calculates the total for each customer and prints a daily sales total. The program must be easy for student helpers to learn, and it must run on the shop’s existing Windows laptop.</p>`,
+  parts:[
+   {l:"(a)",o:3,m:3,q:"State what a problem definition for this case should contain, and what it should leave out.",
+    ans:`<p>The problem: the day’s cash often does not match the items sold. Who is affected: the owner and the student helpers. The effects: money is unaccounted for and the owner cannot tell what was really sold. The causes of the mismatch are left out. They are worked out in the analysis.</p>`,
+    how:["I stated the problem and who is affected.","I stated the effects of the problem.","I said that the causes are not included in the definition."]},
+   {l:"(b)",o:3,m:3,q:"List THREE functional requirements of the program.",
+    ans:`<ul><li>Record each sale.</li><li>Calculate the total for each customer.</li><li>Print the daily sales total.</li></ul>`,
+    how:["Record each sale.","Calculate each customer’s total.","Print the daily sales total."]},
+   {l:"(c)",o:3,m:2,q:"State ONE non-functional requirement of the program in a form that can be measured.",
+    ans:`<p>Easy to learn: a new helper can record a sale correctly within 2 minutes after a 10-minute demonstration. Or, for the platform: the program runs on the shop’s laptop under Windows without any extra software.</p>`,
+    how:["I named a quality or constraint from the case (easy to learn, or runs on Windows).","I stated it so that it can be measured or tested."]},
+   {l:"(d)",o:3,m:2,q:"Name the stage of the problem-solving process that follows problem analysis, and state one thing that is done in it.",
+    ans:`<p>Identify and evaluate possible solutions. Different ways of solving the problem are proposed, and the advantages and disadvantages of each are compared.</p>`,
+    how:["I named the stage: identify and evaluate possible solutions.","I stated that alternatives are proposed or compared."]}
+  ]},
+ {o:3, title:"The clinic",
+  intro:`<p>A small clinic books appointments in a paper diary. Patients are often double-booked, and some wait over an hour to be seen. The clinic wants a system that books appointments, prevents double-booking and prints each doctor’s daily list. Reception staff must be able to book an appointment in under one minute.</p>`,
+  parts:[
+   {l:"(a)",o:3,m:5,q:"Put the five stages of the problem-solving process in order.",
+    auto:STAGES.map((st,i) => `<div class="line">Stage ${i+1}: ${fSel(st,STAGES)}</div>`).join(""),
+    note:`<p>Definition, analysis, identify and evaluate possible solutions, select and justify the optimal solution, then implementation and review.</p>`},
+   {l:"(b)",o:3,m:4,q:"Classify each requirement as functional or non-functional.",
+    auto:`<div class="line">Book an appointment: ${fSel("Functional",["Functional","Non-functional"])}</div><div class="line">Prevent double-booking: ${fSel("Functional",["Functional","Non-functional"])}</div><div class="line">Print each doctor’s daily list: ${fSel("Functional",["Functional","Non-functional"])}</div><div class="line">Staff can book an appointment in under one minute: ${fSel("Non-functional",["Functional","Non-functional"])}</div>`,
+    note:`<p>The first three are things the system does. The last one sets a measurable standard for how well it does it.</p>`},
+   {l:"(c)",o:3,m:2,q:"Two possible solutions are a shared spreadsheet and a custom booking program. Select one and justify your choice.",
+    ans:`<p>A custom booking program. It can check every new booking against existing ones and refuse a clash automatically, which a shared spreadsheet would not do reliably. That directly removes the double-booking problem.</p>`,
+    how:["I selected one of the two solutions.","I gave a reason linked to the case, such as preventing double-booking."]}
+  ]},
+
+ /* ================= Topic 2B ================= */
+ {o:4, title:"Faulty steps",
+  intro:`<p>Each item below breaks one property of a well-designed algorithm.</p>`,
+  parts:[
+   {l:"(a)",o:4,m:4,q:"Choose the property that each item breaks.",
+    auto:`<div class="line">“Stir the mixture for a while.” ${fSel("Clearly defined and unambiguous steps",PROPS)}</div><div class="line"><code>count = 1</code>, then <code>WHILE count > 0 DO count = count + 1 ENDWHILE</code> ${fSel("A finite number of steps",PROPS)}</div><div class="line"><code>PRINT 25 * 4</code>, written to multiply any two numbers: ${fSel("A general solution",PROPS)}</div><div class="line">“Step 6: go back to an earlier step.” ${fSel("Flow of control",PROPS)}</div>`,
+    note:`<p>“A while” has no exact meaning. count only increases, so the loop never ends. 25 × 4 works for one pair only. “An earlier step” does not say which step comes next.</p>`},
+   {l:"(b)",o:4,m:2,q:"Rewrite the first item so that it is unambiguous, and explain your change.",
+    ans:`<p>“Stir the mixture for 2 minutes.” Giving an exact time means everyone who follows the step does the same thing.</p>`,
+    how:["A precise rewrite, such as a stated time.","An explanation that the step now has only one meaning."]}
+  ]},
+ {o:4, title:"Checking an average",
+  intro:`<p>This algorithm is meant to print the average of marks entered until −1 is entered.</p><pre>1.  total = 0
+2.  count = 0
+3.  READ mark
+4.  WHILE mark &lt;&gt; -1 DO
+5.     total = total + mark
+6.     count = count + 1
+7.  ENDWHILE
+8.  PRINT total / count</pre>`,
+  parts:[
+   {l:"(a)",o:4,m:4,q:"List the FOUR properties of a well-designed algorithm.",
+    ans:`<ul><li>It is a general solution to the problem.</li><li>Its steps are clearly defined and unambiguous.</li><li>It has a finite number of steps.</li><li>It has a clear flow of control from one process to another.</li></ul>`,
+    how:["A general solution.","Clearly defined and unambiguous steps.","A finite number of steps.","Flow of control."]},
+   {l:"(b)",o:4,m:1,q:"Which property does the algorithm above break?",
+    auto:`<div class="line">Property: ${fSel("A finite number of steps",PROPS)}</div>`,
+    note:`<p>mark is never read again inside the loop, so it never becomes −1 and the loop never ends.</p>`},
+   {l:"(c)",o:4,m:1,q:"<code>READ mark</code> must be added inside the loop. After which line should it go?",
+    auto:`<div class="line">After line: ${fNum(6)}</div>`,
+    note:`<p>The next mark is read at the end of the loop body, after line 6, so the condition on line 4 can test it.</p>`}
+  ]},
+ {o:5, title:"Rainfall readings",
+  intro:`<p>The flowchart below processes daily rainfall readings in millimetres. Entry ends when −1 is entered.</p>${FC_RAIN}`,
+  parts:[
+   {l:"(a)",o:5,m:2,q:"Read the flowchart.",
+    auto:`<div class="line">Sentinel value: ${fNum(-1)}</div><div class="line">Output for the input <code>30 12 26 25 -1</code>: ${fNum(2)}</div>`,
+    note:`<p>The loop stops when −1 is read. Only 30 and 26 are more than 25, so count is 2. 25 is not more than 25.</p>`},
+   {l:"(b)",o:5,m:6,q:"Convert the flowchart to pseudocode.",rows:10,
+    ans:`<pre>count = 0
+READ rain
+WHILE rain &lt;&gt; -1 DO
+   IF rain > 25 THEN
+      count = count + 1
+   ENDIF
+   READ rain
+ENDWHILE
+PRINT count</pre>`,
+    how:["count is set to 0 at the start.","rain is read before the loop.","A WHILE loop continues while rain is not −1.","An IF tests rain > 25 and adds 1 to count.","rain is read again inside the loop, after the IF.","count is printed after the loop ends."]},
+   {l:"(c)",o:4,m:2,q:"Which property of a well-designed algorithm would each change break?",
+    auto:`<div class="line">The “Read rain” box inside the loop is removed: ${fSel("A finite number of steps",PROPS)}</div><div class="line">The decision “rain > 25?” is replaced by “Is it very rainy?”: ${fSel("Clearly defined and unambiguous steps",PROPS)}</div>`,
+    note:`<p>Without a new reading, rain never changes, so the loop never ends. “Very rainy” could mean different amounts to different people, so the step is ambiguous.</p>`},
+   {l:"(d)",o:5,m:2,q:"Give ONE advantage of a flowchart over pseudocode, and ONE advantage of pseudocode over a flowchart.",
+    ans:`<p><b>Flowchart:</b> the flow of control, including loops and branches, can be seen at a glance.</p><p><b>Pseudocode:</b> it is quicker to write and change, and it is closer to program code, so it is easier to convert to C.</p>`,
+    how:["A valid advantage of a flowchart.","A valid advantage of pseudocode."]}
+  ]},
+ {o:5, title:"The discount narrative",
+  intro:`<p>An algorithm is written as follows.</p><ol><li>Get the price of an item.</li><li>If the price is more than $100, take 10% off the price.</li><li>Display the price.</li></ol>`,
+  parts:[
+   {l:"(a)",o:5,m:1,q:"Which way of representing an algorithm is used above?",
+    auto:`<div class="line">Representation: ${fSel("Narrative",["Narrative","Flowchart","Pseudocode"])}</div>`,
+    note:`<p>Numbered steps in everyday language form a narrative.</p>`},
+   {l:"(b)",o:5,m:3,q:"Choose the flowchart symbol that would be used for each part of the algorithm.",
+    auto:`<div class="line">Get the price: ${fSel("Parallelogram",SYMS)}</div><div class="line">Is the price more than $100? ${fSel("Diamond",SYMS)}</div><div class="line">Take 10% off the price: ${fSel("Rectangle",SYMS)}</div>`,
+    note:`<p>Getting data is input (parallelogram). A test is a decision (diamond). A calculation is a process (rectangle).</p>`},
+   {l:"(c)",o:5,m:4,q:"Write the algorithm as pseudocode.",rows:7,
+    ans:`<pre>READ price
+IF price > 100 THEN
+   price = price * 0.9
+ENDIF
+PRINT price</pre>`,
+    how:["price is read.","An IF tests price > 100.","The discount is calculated correctly (price × 0.9, or price − price × 0.1).","price is printed after the IF."]}
+  ]},
+ {o:6, title:"Spot the constructs",
+  intro:`<p>Study this algorithm.</p><pre>1.  count = 0
+2.  READ age
+3.  WHILE age &lt;&gt; 0 DO
+4.     IF age >= 18 THEN
+5.        count = count + 1
+6.     ENDIF
+7.     READ age
+8.  ENDWHILE
+9.  PRINT count</pre>`,
+  parts:[
+   {l:"(a)",o:6,m:5,q:"Give the number of ONE line that contains each of the following.",
+    auto:`<div class="line">An input statement: ${fNumRe("2 or 7","^(2|7)$")}</div><div class="line">An output statement: ${fNum(9)}</div><div class="line">An assignment statement: ${fNumRe("1 or 5","^(1|5)$")}</div><div class="line">The start of a selection: ${fNum(4)}</div><div class="line">The start of an iteration: ${fNum(3)}</div>`,
+    note:`<p>READ appears on lines 2 and 7. PRINT is on line 9. Lines 1 and 5 assign values. The IF on line 4 is selection, and the WHILE on line 3 is iteration.</p>`},
+   {l:"(b)",o:6,m:2,q:"Look at the loop.",
+    auto:`<div class="line">Type of iteration: ${fSel("Unbounded",["Bounded","Unbounded"])}</div><div class="line">Sentinel value: ${fNum(0)}</div>`,
+    note:`<p>The loop repeats until 0 is entered, so the number of repetitions is not known in advance.</p>`},
+   {l:"(c)",o:6,m:2,q:"Justify why this loop is unbounded.",
+    ans:`<p>The number of times the loop repeats is not known before it starts. It depends on the data, and the loop stops only when the sentinel 0 is entered.</p>`,
+    how:["The number of repetitions is not known before the loop starts.","It stops only when the sentinel is entered."]}
+  ]},
+ {o:6, title:"Writing with constructs",
+  intro:`<p>A shop wants to know how many items cost more than $50. Prices are entered one at a time, and −1 is entered after the last price.</p>`,
+  parts:[
+   {l:"(a)",o:6,m:2,q:"Define selection and give ONE example.",
+    ans:`<p>Selection is a construct in which a condition is tested and the result decides which of two or more sets of steps is carried out. Example: <code>IF price > 50 THEN PRINT "Expensive" ENDIF</code></p>`,
+    how:["A correct definition of selection.","A correct example."]},
+   {l:"(b)",o:6,m:4,q:"Write pseudocode that reads the prices and prints how many are more than $50.",rows:9,
+    ans:`<pre>count = 0
+READ price
+WHILE price &lt;&gt; -1 DO
+   IF price > 50 THEN
+      count = count + 1
+   ENDIF
+   READ price
+ENDWHILE
+PRINT count</pre>`,
+    how:["count starts at 0 and price is read before the loop.","The loop continues while price is not −1.","An IF with price > 50 adds 1 to count.","price is read inside the loop and count is printed after it."]},
+   {l:"(c)",o:6,m:1,q:"A FOR loop that prints the numbers 1 to 10 is an example of which type of iteration?",
+    auto:`<div class="line">Type: ${fSel("Bounded",["Bounded","Unbounded"])}</div>`,
+    note:`<p>It repeats exactly 10 times, a number known before it starts.</p>`}
+  ]},
+
+ /* ================= Topic 2C ================= */
+ {o:7, title:"The school trip",
+  intro:`<p>The algorithm below totals the trip fees paid by 4 students. A student whose fee is more than $50 receives a $10 discount.</p><pre>1.  total = 0
+2.  FOR k = 1 TO 4 DO
+3.     READ fee
+4.     IF fee > 50 THEN
+5.        fee = fee - 10
+6.     ENDIF
+7.     total = total + fee
+8.  ENDFOR
+9.  PRINT total</pre>`,
+  parts:[
+   {l:"(a)",o:7,m:2,q:"For the input data <code>60 40 55 50</code>:",
+    auto:`<div class="line">Number of times the loop body is carried out: ${fNum(4)}</div><div class="line">Number of students who receive the discount: ${fNum(2)}</div>`,
+    note:`<p>The FOR loop runs 4 times. Only 60 and 55 are more than 50.</p>`},
+   {l:"(b)",o:8,m:9,q:"Complete the trace table for the input data <code>60 40 55 50</code>.",
+    auto:`<div class="scroll"><table><tr><th class="n">k</th><th class="n">fee read</th><th>fee after line 6</th><th>total</th></tr>
+     <tr><td class="n">1</td><td class="n">60</td><td>${fNum(50,7)}</td><td>${fNum(50)}</td></tr>
+     <tr><td class="n">2</td><td class="n">40</td><td>${fNum(40,7)}</td><td>${fNum(90)}</td></tr>
+     <tr><td class="n">3</td><td class="n">55</td><td>${fNum(45,7)}</td><td>${fNum(135)}</td></tr>
+     <tr><td class="n">4</td><td class="n">50</td><td>${fNum(50,7)}</td><td>${fNum(185)}</td></tr></table></div>
+     <div class="line">Output printed by line 9: ${fNum(185,7)}</div>`,
+    note:`<p>60 and 55 are more than 50, so each is reduced by 10. 40 is not. 50 is not more than 50, so it is unchanged. The total is 50 + 40 + 45 + 50 = 185.</p>`},
+   {l:"(c)",o:7,m:2,q:"Think about a student whose fee is exactly $50.",
+    auto:`<div class="line">Does this student receive the discount? ${fSel("No",["Yes","No"])}</div><div class="line">Type of test data that 50 is for this condition: ${fSel("Extreme (boundary)",["Normal","Extreme (boundary)","Erroneous"],8)}</div>`,
+    note:`<p>The condition is fee > 50, and 50 > 50 is false, so there is no discount. 50 sits exactly on the boundary of the condition, so it is extreme test data.</p>`}
+  ]},
+ {o:7, title:"Grades",
+  intro:`<p>Study this algorithm.</p><pre>READ score
+IF score >= 80 THEN
+   PRINT "A"
+ELSE IF score >= 65 THEN
+   PRINT "B"
+ELSE IF score >= 50 THEN
+   PRINT "C"
+ELSE
+   PRINT "Fail"
+ENDIF</pre>`,
+  parts:[
+   {l:"(a)",o:7,m:5,q:"Complete the table with the output for each score.",
+    auto:`<div class="scroll"><table class="blank"><tr><th>score</th><th>Output</th></tr>
+     <tr><td class="n">92</td><td>${fSel("A",["A","B","C","Fail"])}</td></tr>
+     <tr><td class="n">80</td><td>${fSel("A",["A","B","C","Fail"])}</td></tr>
+     <tr><td class="n">79</td><td>${fSel("B",["A","B","C","Fail"])}</td></tr>
+     <tr><td class="n">50</td><td>${fSel("C",["A","B","C","Fail"])}</td></tr>
+     <tr><td class="n">49</td><td>${fSel("Fail",["A","B","C","Fail"])}</td></tr></table></div>`,
+    note:`<p>The conditions are tested in order and the first true one is used. 80 meets score >= 80. 79 fails that but meets score >= 65. 50 meets score >= 50. 49 meets none of them.</p>`},
+   {l:"(b)",o:7,m:2,q:"Describe in words what the algorithm does.",
+    ans:`<p>It reads a score and prints a grade: A for 80 or more, B for 65 to 79, C for 50 to 64, and Fail for anything below 50.</p>`,
+    how:["It reads a score and prints a grade.","The grade boundaries are stated correctly."]}
+  ]},
+ {o:8, title:"Counting large numbers",
+  intro:`<p>The algorithm below is meant to count how many of the numbers entered are <b>greater than 10</b>. Entry stops when −1 is entered.</p><pre>1.  count = 0
+2.  READ num
+3.  WHILE num &lt;&gt; -1 DO
+4.     IF num >= 10 THEN
+5.        count = count + 1
+6.     ENDIF
+7.     READ num
+8.  ENDWHILE
+9.  PRINT count</pre>`,
+  parts:[
+   {l:"(a)",o:8,m:2,q:"First test it with the normal data <code>5 8 -1</code>.",
+    auto:`<div class="line">Expected output: ${fNum(0)}</div><div class="line">Actual output: ${fNum(0)}</div>`,
+    note:`<p>Neither 5 nor 8 is greater than 10, and the algorithm also prints 0. This test passes, so it does not reveal the error.</p>`},
+   {l:"(b)",o:8,m:5,q:"Complete the trace table for the input data <code>12 10 7 15 -1</code>.",
+    auto:`<div class="scroll"><table><tr><th class="n">num</th><th>num >= 10?</th><th class="n">count</th></tr>
+     <tr><td class="n">12</td><td>True</td><td>${fNum(1)}</td></tr>
+     <tr><td class="n">10</td><td>True</td><td>${fNum(2)}</td></tr>
+     <tr><td class="n">7</td><td>False</td><td>${fNum(2)}</td></tr>
+     <tr><td class="n">15</td><td>True</td><td>${fNum(3)}</td></tr>
+     <tr><td class="n">-1</td><td colspan="2">Loop ends</td></tr></table></div>
+     <div class="line">Output printed by line 9: ${fNum(3,7)}</div>`,
+    note:`<p>count goes up each time the condition on line 4 is true: after 12, after 10 and after 15. It is unchanged after 7. The output is 3.</p>`},
+   {l:"(c)",o:8,m:1,q:"According to the stated purpose, what should the output be for this data?",
+    auto:`<div class="line">Expected output: ${fNum(2)}</div>`,
+    note:`<p>Only 12 and 15 are greater than 10, so the answer should be 2. The algorithm printed 3, so it is not correct.</p>`},
+   {l:"(d)",o:8,m:2,q:"Identify the line that contains the error and rewrite it correctly.",
+    auto:`<div class="line">Line number: ${fNum(4)}</div><div class="line">Corrected line: ${fTxt("IF num > 10 THEN","^ifnum>10(then)?$")}</div>`,
+    note:`<p>Line 4 uses >=, which also counts a value of exactly 10. The purpose says greater than 10, so the line should read <code>IF num > 10 THEN</code>.</p>`},
+   {l:"(e)",o:8,m:2,q:"Which input value exposed the error, and what type of test data is it?",
+    auto:`<div class="line">Input value: ${fNum(10)}</div><div class="line">Type of test data: ${fSel("Extreme (boundary)",["Normal","Extreme (boundary)","Erroneous"])}</div>`,
+    note:`<p>10 sits exactly on the boundary of the condition. Values well above or below it, such as 15 or 7, give the right result even with the faulty line.</p>`}
+  ]},
+ {o:8, title:"The age check",
+  intro:`<p>An algorithm should accept ages from 13 to 19 inclusive. It prints “Accepted” or “Rejected”.</p><pre>1.  READ age
+2.  IF age > 13 AND age &lt;= 19 THEN
+3.     PRINT "Accepted"
+4.  ELSE
+5.     PRINT "Rejected"
+6.  ENDIF</pre>`,
+  parts:[
+   {l:"(a)",o:8,m:6,q:"Complete the test plan by choosing the type of each test and the result the algorithm SHOULD give.",
+    auto:`<div class="scroll"><table><tr><th>Test data</th><th>Type</th><th>Expected result</th></tr>
+     <tr><td class="n">16</td><td>${fSel("Normal",["Normal","Extreme (boundary)","Erroneous"])}</td><td>${fSel("Accepted",["Accepted","Rejected"])}</td></tr>
+     <tr><td class="n">13</td><td>${fSel("Extreme (boundary)",["Normal","Extreme (boundary)","Erroneous"])}</td><td>${fSel("Accepted",["Accepted","Rejected"])}</td></tr>
+     <tr><td class="n">25</td><td>${fSel("Erroneous",["Normal","Extreme (boundary)","Erroneous"])}</td><td>${fSel("Rejected",["Accepted","Rejected"])}</td></tr></table></div>`,
+    note:`<p>16 is a typical valid age. 13 is valid and sits on the lower boundary. 25 is outside the range, so it should be rejected.</p>`},
+   {l:"(b)",o:8,m:1,q:"Which of these three test values gives a result that differs from the expected result?",
+    auto:`<div class="line">Test value: ${fNum(13)}</div>`,
+    note:`<p>13 > 13 is false, so the algorithm prints “Rejected” although 13 should be accepted.</p>`},
+   {l:"(c)",o:8,m:2,q:"Identify the line with the error and rewrite it correctly.",
+    auto:`<div class="line">Line number: ${fNum(2)}</div><div class="line">Corrected line: ${fTxt("IF age >= 13 AND age <= 19 THEN","^ifage>=13andage<=19(then)?$")}</div>`,
+    note:`<p>The lower limit must include 13, so > becomes >=.</p>`}
+  ]},
+
+ /* ================= Topic 2D ================= */
+ {o:9, title:"The car park",
+  intro:`<p>A car park charges $5 for the first hour and $3 for each additional hour. A vehicle parked for more than 8 hours pays a flat charge of $30. The attendant enters the number of hours for each vehicle. Entering 0 ends the day. The charge for each vehicle is printed, and the day’s total takings are printed at the end.</p>`,
+  parts:[
+   {l:"(a)",o:9,m:3,q:"List the input, the processing and the output for this problem.",
+    ans:`<ul><li><b>Input:</b> the number of hours for each vehicle.</li><li><b>Processing:</b> work out the charge (flat $30 if more than 8 hours, otherwise $5 plus $3 for each hour after the first), add it to the total, and repeat until 0 is entered.</li><li><b>Output:</b> the charge for each vehicle and the day’s total.</li></ul>`,
+    how:["Input: hours for each vehicle.","Processing: calculate the charge and add it to the total.","Output: each charge and the total takings."]},
+   {l:"(b)",o:9,m:8,q:"Write pseudocode for the algorithm.",rows:12,
+    ans:`<pre>total = 0
+READ hours
+WHILE hours &lt;&gt; 0 DO
+   IF hours > 8 THEN
+      charge = 30
+   ELSE
+      charge = 5 + (hours - 1) * 3
+   ENDIF
+   PRINT charge
+   total = total + charge
+   READ hours
+ENDWHILE
+PRINT total</pre>`,
+    how:["total is set to 0 before the loop.","hours is read before the loop and again inside it.","The loop continues until the sentinel 0 is entered.","A selection tests whether hours is more than 8.","The flat charge of 30 is on the correct branch.","The other branch calculates 5 + (hours − 1) × 3.","Each charge is printed and added to the total inside the loop.","The total is printed after the loop ends."]},
+   {l:"(c)",o:9,m:3,q:"Work out the expected charge for each of these test values.",
+    auto:`<div class="scroll"><table><tr><th>Hours</th><th>Type of test data</th><th>Expected charge ($)</th></tr>
+     <tr><td class="n">1</td><td>Extreme: the smallest stay</td><td>${fNum(5)}</td></tr>
+     <tr><td class="n">8</td><td>Extreme: the last hourly charge</td><td>${fNum(26)}</td></tr>
+     <tr><td class="n">9</td><td>Extreme: the first flat charge</td><td>${fNum(30)}</td></tr></table></div>`,
+    note:`<p>1 hour is $5. 8 hours is 5 + 7 × 3 = $26. 9 hours is more than 8, so the flat $30 applies.</p>`},
+   {l:"(d)",o:10,m:2,q:"Give TWO reasons why this logic should be worked out as an algorithm before it is coded in C.",
+    ans:`<p>Any two of: the computer follows instructions exactly, so the steps must be in the right order to give the right charge; errors can be found and corrected on paper before any code is written; the logic does not depend on the language, so it can be coded in C or any other language; the program is easier to write, test and maintain.</p>`,
+    how:["I gave one valid reason.","I gave a second, different reason."]}
+  ]},
+ {o:9, title:"Library fines: the algorithm",
+  intro:`<p>A library charges $2 for each day a book is overdue, up to a maximum fine of $20 per book. A program must read the number of days a returned book is overdue and print the fine.</p>`,
+  parts:[
+   {l:"(a)",o:9,m:3,q:"List the input, the processing and the output.",
+    ans:`<ul><li><b>Input:</b> the number of days the book is overdue.</li><li><b>Processing:</b> fine = days × 2, limited to a maximum of 20.</li><li><b>Output:</b> the fine.</li></ul>`,
+    how:["Input: days overdue.","Processing: days × 2, with a maximum of 20.","Output: the fine."]},
+   {l:"(b)",o:9,m:3,q:"Work out the expected fine for each of these values.",
+    auto:`<div class="scroll"><table><tr><th>Days overdue</th><th>Expected fine ($)</th></tr>
+     <tr><td class="n">3</td><td>${fNum(6)}</td></tr><tr><td class="n">10</td><td>${fNum(20)}</td></tr><tr><td class="n">14</td><td>${fNum(20)}</td></tr></table></div>`,
+    note:`<p>3 × 2 = $6. 10 × 2 = $20, which is exactly the maximum. 14 × 2 = $28, which is capped at $20.</p>`},
+   {l:"(c)",o:9,m:4,q:"Write pseudocode that reads the number of days one book is overdue and prints the fine.",rows:8,
+    ans:`<pre>READ days
+fine = days * 2
+IF fine > 20 THEN
+   fine = 20
+ENDIF
+PRINT fine</pre>`,
+    how:["days is read.","The fine is calculated as days × 2.","A selection limits the fine to 20.","The fine is printed."]},
+   {l:"(d)",o:10,m:2,q:"A programmer codes the fine as <code>fine = days + 2</code>.",
+    auto:`<div class="line">Type of error: ${fSel("Logic error",["Syntax error","Logic error"])}</div><div class="line">Will the compiler report it? ${fSel("No",["Yes","No"])}</div>`,
+    note:`<p>The statement follows the rules of the language, so the program runs. It simply gives the wrong fine, which makes it a logic error that only testing will reveal.</p>`}
+  ]},
+ {o:10, title:"Lines in the right order",
+  intro:`<p>These four lines are meant to work out the cost of a phone call, but they have been jumbled.</p><pre>A.  PRINT cost
+B.  READ minutes
+C.  cost = minutes * rate
+D.  READ rate</pre>`,
+  parts:[
+   {l:"(a)",o:10,m:4,q:"Put the lines in a logical order.",
+    auto:`<div class="line">1st: ${fSelRe("B or D","^(b|d)$",["A","B","C","D"])}</div><div class="line">2nd: ${fSelRe("B or D","^(b|d)$",["A","B","C","D"])}</div><div class="line">3rd: ${fSel("C",["A","B","C","D"])}</div><div class="line">4th: ${fSel("A",["A","B","C","D"])}</div>`,
+    note:`<p>Both values must be read before the cost is calculated, and the cost must be calculated before it is printed. Lines B and D can come in either order.</p>`},
+   {l:"(b)",o:10,m:2,q:"Explain what would go wrong if line C were placed before line B.",
+    ans:`<p>minutes would not yet have a value when the cost is calculated, so the cost would be wrong. The program would still run with no error message, which makes this a logic error.</p>`,
+    how:["minutes has no value when the cost is calculated, so the cost is wrong.","It is a logic error: the program runs but gives the wrong result."]}
+  ]},
+ {o:10, title:"Syntax or logic?",
+  intro:`<p>Each item below describes a mistake in a program.</p>`,
+  parts:[
+   {l:"(a)",o:10,m:5,q:"Classify each mistake.",
+    auto:`<div class="line"><code>prnt total</code>: ${fSel("Syntax error",["Syntax error","Logic error"])}</div><div class="line"><code>average = total / count</code> placed before the loop that adds the numbers: ${fSel("Logic error",["Syntax error","Logic error"])}</div><div class="line"><code>printf("Hello")</code> with no semicolon at the end, in C: ${fSel("Syntax error",["Syntax error","Logic error"])}</div><div class="line"><code>IF mark > 50</code>, when a mark of 50 should pass: ${fSel("Logic error",["Syntax error","Logic error"])}</div><div class="line"><code>WHILE count &lt; 10 DO</code>, where count is never increased: ${fSel("Logic error",["Syntax error","Logic error"])}</div>`,
+    note:`<p>A misspelt keyword and a missing semicolon break the language’s rules, so the translator reports them. The other three run but give wrong results or never end.</p>`},
+   {l:"(b)",o:10,m:3,q:"Explain THREE reasons for developing the logic of a program before coding it.",
+    ans:`<ul><li>The computer follows instructions exactly, so the steps must be in a correct logical order to give the right result.</li><li>Errors can be found and corrected on paper, before coding, when they are cheaper to fix.</li><li>The logic does not depend on any language, so it can be coded in any language, and the program is easier to test and maintain.</li></ul>`,
+    how:["A first valid reason.","A second, different reason.","A third, different reason."]}
+  ]}
+];
+const quiz = document.getElementById("quiz");
+const topicOf = o => byId(o).t;
+const mcqOf = k => MCQ.map((m,i) => [m,i]).filter(x => topicOf(x[0].o) === k);
+const sqOf = k => SQ.map((Q,qi) => [Q,qi]).filter(x => topicOf(x[0].o) === k);
+const objsOf = k => OBJ.filter(o => o.t === k);
+const minutesFor = k => { const n = mcqOf(k).length + 8 * sqOf(k).length; return Math.round(n / 15) * 15; };
+function sectionHTML(k){
+  const mq = mcqOf(k), sq = sqOf(k), ob = objsOf(k);
+  return '<p class="intro">Covers objectives ' + ob.map(o => '2.' + o.id).join(", ") + '. Where your answers are incorrect, you will be advised which objectives to review. Part A is marked as you go. In Part B, some parts are checked for you. For the written parts, answer first, then show the model answer and tick the marks you earned. Be honest with the ticks: the results are only useful if the marks are real.</p>' +
+    '<section><h3>Part A · ' + mq.length + ' multiple-choice questions</h3><ol class="mcq">' +
+    mq.map(x => { const m = x[0], i = x[1]; return '<li class="mq t' + k + '" data-i="' + i + '"><div class="mqq">' + m.q + '</div><div class="opts">' +
+      m.opts.map((t,j) => '<button type="button" class="opt" id="q' + i + 'o' + j + '" data-k="' + j + '"><b>' + "ABCD"[j] + '</b><span>' + t + '</span></button>').join("") +
+      '</div><p class="fb" hidden></p></li>'; }).join("") + '</ol></section>' +
+    '<section><h3>Part B · ' + sq.length + ' structured questions</h3><div style="display:flex;flex-direction:column;gap:28px">' +
+    sq.map((x,n) => { const Q = x[0], qi = x[1]; return '<div class="sq"><h4>Question ' + (n+1) + ' · ' + Q.title + '</h4><div class="case">' + Q.intro + '</div>' +
+      Q.parts.map((P,pi) => '<div class="part t' + k + '" data-o="' + P.o + '"><div class="pq"><b>' + P.l + '</b>' + P.q + ' <span class="pm">[' + P.m + (P.m === 1 ? ' mark]' : ' marks]') + '</span></div>' +
+        (P.auto ? '<div class="auto">' + P.auto + '</div><button type="button" class="btn chk">Check my answers</button><div class="note" hidden><span class="lab">Explanation</span>' + P.note + '</div>'
+                : (P.paper ? '<p class="paper">Draw your answer on paper, then show the model answer.</p>' : '<textarea id="w' + qi + '_' + pi + '" rows="' + (P.rows || 4) + '" placeholder="Type your answer here, or write it on paper."></textarea>') +
+                  '<button type="button" class="btn rev">Show the model answer</button><div class="model" hidden><span class="lab">Model answer</span>' + P.ans +
+                  '<span class="lab">Tick each mark you earned</span><ul class="ticks">' + P.how.map((t,j) => '<li><label><input type="checkbox" id="m' + qi + '_' + pi + '_' + j + '"><span>' + t + '</span></label></li>').join("") + '</ul></div>') +
+        '</div>').join("") + '</div>'; }).join("") + '</div></section>' +
+    '<section class="res"><div class="acts"><button type="button" class="btn big showRes">See my results</button><button type="button" class="btn restart">Start again</button></div><div class="resOut" aria-live="polite"></div></section>';
+}
+const norm = v => String(v).toLowerCase().replace(/[\s()]/g, "").replace(/−/g, "-");
+function checkFill(el){
+  const v = norm(el.value), ans = norm(el.dataset.ans);
+  const ok = v !== "" && (el.dataset.re ? new RegExp(el.dataset.re).test(v) : (v === ans || (!isNaN(v) && !isNaN(ans) && parseFloat(v) === parseFloat(ans))));
+  el.classList.add(ok ? "ok" : "no"); el.disabled = true;
+  if (!ok) el.insertAdjacentHTML("afterend", '<span class="corr">Answer: ' + el.dataset.ans + '</span>');
+  return ok;
+}
+function results(sec, k){
+  const got = {}, max = {};
+  objsOf(k).forEach(o => { got[o.id] = 0; max[o.id] = 0; });
+  sec.querySelectorAll(".mq").forEach(li => { const o = MCQ[+li.dataset.i].o; max[o]++; if (li.dataset.ok === "1") got[o]++; });
+  sec.querySelectorAll(".part").forEach(pt => {
+    pt.querySelectorAll(".fill").forEach(f => { const o = +(f.dataset.o || pt.dataset.o); max[o]++; if (f.classList.contains("ok")) got[o]++; });
+    pt.querySelectorAll(".ticks input").forEach(c => { const o = +pt.dataset.o; max[o]++; if (c.checked) got[o]++; });
+  });
+  const rows = objsOf(k).map(o => ({o, g:got[o.id], m:max[o.id], r:got[o.id]/max[o.id]})).sort((a,b) => a.r - b.r || a.o.id - b.o.id);
+  const G = rows.reduce((t,r) => t + r.g, 0), M = rows.reduce((t,r) => t + r.m, 0);
+  const todo = sec.querySelectorAll(".mq:not(.done), .part:not(.done)").length;
+  sec.querySelector(".resOut").innerHTML = '<p class="total">' + G + ' out of ' + M + ' marks (' + Math.round(100*G/M) + '%)</p>' +
+    (todo ? '<p>' + todo + (todo === 1 ? ' question or part has' : ' questions or parts have') + ' not been answered yet. They count as zero.</p>' : '') +
+    (rows.some(r => r.g < r.m) ? '<p><b>Objectives to review:</b> ' + rows.filter(r => r.g < r.m).map(r => '2.' + r.o.id + ' ' + SHORT[r.o.id]).join(", ") + '. They are listed first below. Open the notes to revise them.</p>' : '<p>No marks were lost. There are no objectives to review.</p>') +
+    '<div class="scroll"><table><tr><th>Objective</th><th class="n">Marks</th><th>Score</th><th></th></tr>' +
+    rows.map(r => '<tr class="t' + r.o.t + '"><td><b>2.' + r.o.id + '</b> ' + r.o.obj + '</td><td class="n">' + r.g + ' / ' + r.m + '</td><td><span class="meter"><i style="width:' + Math.round(100*r.r) + '%"></i></span></td>' +
+      '<td><button type="button" class="chip" data-notes="' + r.o.id + '">Open notes</button></td></tr>').join("") + '</table></div>';
+}
+function openQuiz(k){
+  if (!quiz.firstChild) quiz.innerHTML = '<div class="shead"><div class="t"><span class="eyebrow" id="quizEyebrow"></span><h2 id="quizTitle"></h2></div>' +
+    '<button type="button" class="x" id="closeQuiz" aria-label="Close self-check">Close</button></div><div class="sbody" id="quizBody"></div>';
+  let sec = document.getElementById("qs-" + k);
+  if (!sec) { sec = document.createElement("div"); sec.id = "qs-" + k; sec.className = "qsec"; sec.dataset.topic = k; sec.innerHTML = sectionHTML(k); document.getElementById("quizBody").appendChild(sec); }
+  const switched = quiz.dataset.topic !== k;
+  quiz.querySelectorAll(".qsec").forEach(s => { s.hidden = s !== sec; });
+  quiz.dataset.topic = k; quiz.className = "sheet quiz t" + k;
+  document.getElementById("quizEyebrow").textContent = "Topic " + TOPICS[k].code + " · Practice only. Nothing is saved or sent.";
+  document.getElementById("quizTitle").textContent = "Topic " + TOPICS[k].code + " self-check: " + TOPICS[k].name;
+  if (!quiz.open) quiz.showModal();
+  if (switched) quiz.scrollTop = 0;
+}
+quiz.addEventListener("click", ev => {
+  if (ev.target === quiz || ev.target.closest("#closeQuiz")) { quiz.close(); return; }
+  const sec = ev.target.closest(".qsec"); if (!sec) return;
+  const k = sec.dataset.topic;
+  const opt = ev.target.closest(".opt");
+  if (opt && !opt.disabled) {
+    const li = opt.closest(".mq"), m = MCQ[+li.dataset.i], j = +opt.dataset.k, ok = j === m.a;
+    li.querySelectorAll(".opt").forEach(b => { b.disabled = true; if (+b.dataset.k === m.a) b.classList.add("right"); });
+    if (!ok) opt.classList.add("wrong");
+    li.dataset.ok = ok ? "1" : "0"; li.classList.add("done");
+    const fb = li.querySelector(".fb"); fb.hidden = false;
+    fb.innerHTML = '<span class="v ' + (ok ? 'ok">Correct.' : 'no">Not quite. The answer is ' + "ABCD"[m.a] + '.') + '</span> ' + m.why + (ok ? '' : ' <span class="rv">Review objective <button type="button" class="chip" data-notes="' + m.o + '"><b>2.' + m.o + '</b>' + SHORT[m.o] + '</button></span>');
+    return;
+  }
+  const chk = ev.target.closest(".chk");
+  if (chk) { const pt = chk.closest(".part"); const wrong = new Set();
+    pt.querySelectorAll(".fill").forEach(f => { if (!checkFill(f)) wrong.add(+(f.dataset.o || pt.dataset.o)); });
+    const note = pt.querySelector(".note"); note.hidden = false;
+    if (wrong.size) note.insertAdjacentHTML("beforeend", '<p class="rv">Review objective ' + [...wrong].sort((a,b) => a-b).map(o => '<button type="button" class="chip" data-notes="' + o + '"><b>2.' + o + '</b>' + SHORT[o] + '</button>').join(" ") + '</p>');
+    pt.classList.add("done"); chk.hidden = true; return; }
+  const rev = ev.target.closest(".rev");
+  if (rev) { const pt = rev.closest(".part"); pt.querySelector(".model").hidden = false; pt.classList.add("done"); rev.hidden = true; return; }
+  if (ev.target.closest(".showRes")) { results(sec, k); sec.querySelector(".resOut").scrollIntoView({block:"nearest"}); return; }
+  if (ev.target.closest(".restart")) { sec.innerHTML = sectionHTML(k); quiz.scrollTop = 0; return; }
+  const nb = ev.target.closest("[data-notes]");
+  if (nb) { quiz.close(); openSheet(+nb.dataset.notes); }
+});
+/* one self-check box at the foot of each topic column */
+Object.keys(TOPICS).forEach(k => {
+  const col = map.querySelector(".col.t" + k), ob = objsOf(k);
+  const box = document.createElement("div");
+  box.className = "tcheck t" + k;
+  box.innerHTML = '<span class="lab">Topic ' + TOPICS[k].code + ' self-check</span><p>' + mcqOf(k).length + ' multiple-choice and ' + sqOf(k).length +
+    ' structured questions on objectives 2.' + ob[0].id + ' to 2.' + ob[ob.length-1].id + '. Allow about ' + minutesFor(k) + ' minutes.</p><p class="adv">Where your answers are incorrect, you will be advised which objectives to review.</p>' +
+    '<button type="button" class="btn big" data-topic="' + k + '">Start the self-check</button>';
+  box.querySelector("button").addEventListener("click", () => openQuiz(k));
+  col.appendChild(box);
+});
+drawWires();
+
+const m = /^#o(\d+)$/.exec(location.hash);
+if (m && byId(+m[1])) openSheet(+m[1]);
+</script>
+
+</body>
+</html>
